@@ -1,0 +1,3027 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>hideo-t&#x27;s Apps</title>
+<meta name="description" content="hideo-t のGitHubプロジェクト一覧">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;700;900&family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet">
+<style>
+*,*::before,*::after{margin:0;padding:0;box-sizing:border-box}
+:root{
+  --bg:#08080c;--surface:#111118;--surface2:#1a1a24;
+  --border:#252535;--border-hi:#6c5ce7;
+  --text:#e4e4ec;--text2:#7a7a92;--text3:#55556a;
+  --accent:#6c5ce7;--accent2:#a29bfe;
+  --green:#00d2a0;--green-bg:rgba(0,210,160,.08);
+  --orange:#fdcb6e;
+  --radius:10px;
+}
+html{scroll-behavior:smooth}
+body{
+  min-height:100vh;background:var(--bg);color:var(--text);
+  font-family:'Noto Sans JP',sans-serif;-webkit-font-smoothing:antialiased;
+}
+.header{
+  padding:48px 24px 36px;text-align:center;
+  background:linear-gradient(180deg,rgba(108,92,231,.06) 0%,transparent 100%);
+  border-bottom:1px solid var(--border);
+}
+.header h1{
+  font-size:clamp(24px,5vw,38px);font-weight:900;
+  background:linear-gradient(135deg,var(--accent2),var(--accent));
+  -webkit-background-clip:text;-webkit-text-fill-color:transparent;
+  background-clip:text;margin-bottom:6px;
+}
+.subtitle{color:var(--text2);font-size:13px;margin-bottom:16px}
+.stats{display:flex;gap:16px;justify-content:center;flex-wrap:wrap}
+.stat{
+  background:var(--surface);border:1px solid var(--border);border-radius:6px;
+  padding:8px 16px;font-size:12px;color:var(--text2);
+}
+.stat strong{color:var(--text);font-size:16px;margin-right:3px}
+.controls{
+  max-width:960px;margin:20px auto;padding:0 20px;
+  display:flex;gap:10px;flex-wrap:wrap;align-items:center;
+}
+.search-box{
+  flex:1;min-width:180px;padding:10px 14px;
+  background:var(--surface);border:1px solid var(--border);border-radius:7px;
+  color:var(--text);font-size:13px;font-family:inherit;outline:none;transition:border .2s;
+}
+.search-box:focus{border-color:var(--accent)}
+.search-box::placeholder{color:var(--text3)}
+.filter-btn{
+  padding:8px 16px;background:var(--surface);border:1px solid var(--border);
+  border-radius:7px;color:var(--text2);font-size:12px;cursor:pointer;
+  transition:all .2s;font-family:inherit;
+}
+.filter-btn:hover,.filter-btn.active{
+  border-color:var(--accent);color:var(--accent2);background:rgba(108,92,231,.06);
+}
+.list{
+  max-width:960px;margin:0 auto;padding:16px 20px 60px;
+  display:flex;flex-direction:column;gap:6px;
+}
+.card-wrap{display:flex;align-items:stretch}
+.card{
+  display:flex;align-items:center;flex:1;min-width:0;
+  background:var(--surface);border:1px solid var(--border);
+  border-radius:var(--radius);
+  padding:14px 16px;gap:14px;
+  text-decoration:none;color:inherit;
+  transition:all .25s ease;
+  animation:cardIn .35s ease-out both;
+}
+.card:hover{
+  border-color:var(--border-hi);
+  background:var(--surface2);
+  transform:translateX(4px);
+}
+.card.has-pages{border-left:3px solid var(--green)}
+.card.has-pages:hover{
+  border-color:var(--green);
+  box-shadow:0 0 20px rgba(0,210,160,.08);
+}
+.card-icon{font-size:24px;width:40px;text-align:center;flex-shrink:0}
+.card-body{flex:1;min-width:0}
+.card-header{display:flex;align-items:center;gap:10px;margin-bottom:2px}
+.card-title{
+  font-size:15px;font-weight:700;
+  font-family:'JetBrains Mono','Noto Sans JP',monospace;
+  white-space:nowrap;overflow:hidden;text-overflow:ellipsis;
+}
+.live-dot{font-size:10px;color:var(--green);white-space:nowrap;animation:pulse 2s infinite;flex-shrink:0}
+@keyframes pulse{0%,100%{opacity:1}50%{opacity:.4}}
+.card-desc{
+  font-size:12px;color:var(--text2);line-height:1.4;
+  white-space:nowrap;overflow:hidden;text-overflow:ellipsis;
+  margin-bottom:4px;
+}
+.card-footer{display:flex;align-items:center;gap:6px}
+.badges{display:flex;gap:4px;flex-wrap:wrap}
+.badge{font-size:10px;padding:2px 7px;border-radius:3px;background:rgba(255,255,255,.04);color:var(--text3)}
+.badge.lang{color:var(--accent2);background:rgba(108,92,231,.08)}
+.badge.stars{color:var(--orange);background:rgba(253,203,110,.08)}
+.updated{font-size:10px;color:var(--text3);margin-left:auto;white-space:nowrap}
+.card-arrow{font-size:18px;color:var(--text3);flex-shrink:0;transition:all .25s;margin-left:8px}
+.card:hover .card-arrow{color:var(--accent2);transform:translateX(4px)}
+.card.has-pages:hover .card-arrow{color:var(--green)}
+.repo-link{
+  display:flex;align-items:center;justify-content:center;
+  width:52px;flex-shrink:0;
+  background:var(--surface);border:1px solid var(--border);
+  border-left:none;border-radius:0 var(--radius) var(--radius) 0;
+  color:var(--text3);font-size:11px;text-decoration:none;transition:all .2s;
+}
+.repo-link:hover{background:var(--surface2);color:var(--accent2);border-color:var(--accent)}
+.empty{text-align:center;padding:48px 24px;color:var(--text3);font-size:14px}
+.footer{
+  text-align:center;padding:32px 24px;color:var(--text3);
+  font-size:11px;border-top:1px solid var(--border);
+}
+.footer a{color:var(--accent2);text-decoration:none}
+@keyframes cardIn{from{opacity:0;transform:translateY(12px)}to{opacity:1;transform:translateY(0)}}
+@media(max-width:600px){
+  .list{padding:12px 12px 48px}
+  .card{padding:12px;gap:10px}
+  .card-icon{font-size:20px;width:32px}
+  .card-title{font-size:13px}
+  .repo-link{width:40px;font-size:10px}
+  .controls{padding:0 12px}
+}
+</style>
+</head>
+<body>
+<div class="header">
+  <h1>hideo-t&#x27;s Apps</h1>
+  <p class="subtitle">@hideo-t</p>
+  <div class="stats">
+    <div class="stat"><strong>150</strong>repos</div>
+    <div class="stat"><strong>147</strong>live apps</div>
+  </div>
+</div>
+<div class="controls">
+  <input type="text" class="search-box" id="search" placeholder="🔍 検索…" oninput="doFilter()">
+  <button class="filter-btn active" onclick="setF('all',this)">すべて</button>
+  <button class="filter-btn" onclick="setF('pages',this)">🟢 公開アプリ</button>
+  <button class="filter-btn" onclick="setF('starred',this)">★ Star</button>
+</div>
+<div class="list" id="list">
+
+    <div class="card-wrap">
+      <a href="https://hideo-t.github.io/aimibun/" target="_blank" rel="noopener" class="card has-pages"
+         data-name="aimibun" data-desc="" data-stars="0" data-pages="1">
+        <div class="card-icon">🌐</div>
+        <div class="card-body">
+          <div class="card-header">
+            <h3 class="card-title">aimibun</h3>
+            <span class="live-dot" title="公開中">● LIVE</span>
+          </div>
+          
+          <div class="card-footer">
+            <div class="badges"><span class="badge lang">HTML</span></div>
+            <span class="updated">2026/02/17</span>
+          </div>
+        </div>
+        <div class="card-arrow">→</div>
+      </a>
+      <a href="https://github.com/hideo-t/aimibun" target="_blank" rel="noopener" class="repo-link" title="ソースコード">📂</a>
+    </div>
+    <div class="card-wrap">
+      <a href="https://hideo-t.github.io/kurojika/" target="_blank" rel="noopener" class="card has-pages"
+         data-name="kurojika" data-desc="" data-stars="0" data-pages="1">
+        <div class="card-icon">🌐</div>
+        <div class="card-body">
+          <div class="card-header">
+            <h3 class="card-title">kurojika</h3>
+            <span class="live-dot" title="公開中">● LIVE</span>
+          </div>
+          
+          <div class="card-footer">
+            <div class="badges"><span class="badge lang">HTML</span></div>
+            <span class="updated">2026/02/17</span>
+          </div>
+        </div>
+        <div class="card-arrow">→</div>
+      </a>
+      <a href="https://github.com/hideo-t/kurojika" target="_blank" rel="noopener" class="repo-link" title="ソースコード">📂</a>
+    </div>
+    <div class="card-wrap">
+      <a href="https://hideo-t.github.io/negaibi/" target="_blank" rel="noopener" class="card has-pages"
+         data-name="negaibi" data-desc="" data-stars="0" data-pages="1">
+        <div class="card-icon">🌐</div>
+        <div class="card-body">
+          <div class="card-header">
+            <h3 class="card-title">negaibi</h3>
+            <span class="live-dot" title="公開中">● LIVE</span>
+          </div>
+          
+          <div class="card-footer">
+            <div class="badges"><span class="badge lang">HTML</span></div>
+            <span class="updated">2026/02/17</span>
+          </div>
+        </div>
+        <div class="card-arrow">→</div>
+      </a>
+      <a href="https://github.com/hideo-t/negaibi" target="_blank" rel="noopener" class="repo-link" title="ソースコード">📂</a>
+    </div>
+    <div class="card-wrap">
+      <a href="https://hideo-t.github.io/judgex2/" target="_blank" rel="noopener" class="card has-pages"
+         data-name="judgex2" data-desc="" data-stars="0" data-pages="1">
+        <div class="card-icon">⚡</div>
+        <div class="card-body">
+          <div class="card-header">
+            <h3 class="card-title">judgex2</h3>
+            <span class="live-dot" title="公開中">● LIVE</span>
+          </div>
+          
+          <div class="card-footer">
+            <div class="badges"><span class="badge lang">JavaScript</span></div>
+            <span class="updated">2026/02/16</span>
+          </div>
+        </div>
+        <div class="card-arrow">→</div>
+      </a>
+      <a href="https://github.com/hideo-t/judgex2" target="_blank" rel="noopener" class="repo-link" title="ソースコード">📂</a>
+    </div>
+    <div class="card-wrap">
+      <a href="https://hideo-t.github.io/izakayayosoku/" target="_blank" rel="noopener" class="card has-pages"
+         data-name="izakayayosoku" data-desc="" data-stars="0" data-pages="1">
+        <div class="card-icon">🌐</div>
+        <div class="card-body">
+          <div class="card-header">
+            <h3 class="card-title">izakayayosoku</h3>
+            <span class="live-dot" title="公開中">● LIVE</span>
+          </div>
+          
+          <div class="card-footer">
+            <div class="badges"><span class="badge lang">HTML</span></div>
+            <span class="updated">2026/02/16</span>
+          </div>
+        </div>
+        <div class="card-arrow">→</div>
+      </a>
+      <a href="https://github.com/hideo-t/izakayayosoku" target="_blank" rel="noopener" class="repo-link" title="ソースコード">📂</a>
+    </div>
+    <div class="card-wrap">
+      <a href="https://hideo-t.github.io/marine-creatures-adventure/" target="_blank" rel="noopener" class="card has-pages"
+         data-name="marine-creatures-adventure" data-desc="📖 海の謎を解く者たち — ai generated novel" data-stars="0" data-pages="1">
+        <div class="card-icon">🌐</div>
+        <div class="card-body">
+          <div class="card-header">
+            <h3 class="card-title">marine-creatures-adventure</h3>
+            <span class="live-dot" title="公開中">● LIVE</span>
+          </div>
+          <p class="card-desc">📖 海の謎を解く者たち — AI Generated Novel</p>
+          <div class="card-footer">
+            <div class="badges"><span class="badge lang">HTML</span></div>
+            <span class="updated">2026/02/16</span>
+          </div>
+        </div>
+        <div class="card-arrow">→</div>
+      </a>
+      <a href="https://github.com/hideo-t/marine-creatures-adventure" target="_blank" rel="noopener" class="repo-link" title="ソースコード">📂</a>
+    </div>
+    <div class="card-wrap">
+      <a href="https://hideo-t.github.io/forest-fairies-secret/" target="_blank" rel="noopener" class="card has-pages"
+         data-name="forest-fairies-secret" data-desc="📖 森の秘密: 妖精との邂逅 — ai generated novel" data-stars="0" data-pages="1">
+        <div class="card-icon">🌐</div>
+        <div class="card-body">
+          <div class="card-header">
+            <h3 class="card-title">forest-fairies-secret</h3>
+            <span class="live-dot" title="公開中">● LIVE</span>
+          </div>
+          <p class="card-desc">📖 森の秘密: 妖精との邂逅 — AI Generated Novel</p>
+          <div class="card-footer">
+            <div class="badges"><span class="badge lang">HTML</span></div>
+            <span class="updated">2026/02/16</span>
+          </div>
+        </div>
+        <div class="card-arrow">→</div>
+      </a>
+      <a href="https://github.com/hideo-t/forest-fairies-secret" target="_blank" rel="noopener" class="repo-link" title="ソースコード">📂</a>
+    </div>
+    <div class="card-wrap">
+      <a href="https://hideo-t.github.io/marine-fairy-adventure/" target="_blank" rel="noopener" class="card has-pages"
+         data-name="marine-fairy-adventure" data-desc="📖 海の秘宝: 妖精の鼓動 — ai generated novel" data-stars="0" data-pages="1">
+        <div class="card-icon">🌐</div>
+        <div class="card-body">
+          <div class="card-header">
+            <h3 class="card-title">marine-fairy-adventure</h3>
+            <span class="live-dot" title="公開中">● LIVE</span>
+          </div>
+          <p class="card-desc">📖 海の秘宝: 妖精の鼓動 — AI Generated Novel</p>
+          <div class="card-footer">
+            <div class="badges"><span class="badge lang">HTML</span></div>
+            <span class="updated">2026/02/16</span>
+          </div>
+        </div>
+        <div class="card-arrow">→</div>
+      </a>
+      <a href="https://github.com/hideo-t/marine-fairy-adventure" target="_blank" rel="noopener" class="repo-link" title="ソースコード">📂</a>
+    </div>
+    <div class="card-wrap">
+      <a href="https://hideo-t.github.io/fairy-tale-adventure/" target="_blank" rel="noopener" class="card has-pages"
+         data-name="fairy-tale-adventure" data-desc="📖 妖精の森の秘密: 妖精と人間の邂逅 — ai generated novel" data-stars="0" data-pages="1">
+        <div class="card-icon">🌐</div>
+        <div class="card-body">
+          <div class="card-header">
+            <h3 class="card-title">fairy-tale-adventure</h3>
+            <span class="live-dot" title="公開中">● LIVE</span>
+          </div>
+          <p class="card-desc">📖 妖精の森の秘密: 妖精と人間の邂逅 — AI Generated Novel</p>
+          <div class="card-footer">
+            <div class="badges"><span class="badge lang">HTML</span></div>
+            <span class="updated">2026/02/16</span>
+          </div>
+        </div>
+        <div class="card-arrow">→</div>
+      </a>
+      <a href="https://github.com/hideo-t/fairy-tale-adventure" target="_blank" rel="noopener" class="repo-link" title="ソースコード">📂</a>
+    </div>
+    <div class="card-wrap">
+      <a href="https://hideo-t.github.io/NovelForge/" target="_blank" rel="noopener" class="card has-pages"
+         data-name="novelforge" data-desc="" data-stars="0" data-pages="1">
+        <div class="card-icon">🌐</div>
+        <div class="card-body">
+          <div class="card-header">
+            <h3 class="card-title">NovelForge</h3>
+            <span class="live-dot" title="公開中">● LIVE</span>
+          </div>
+          
+          <div class="card-footer">
+            <div class="badges"><span class="badge lang">HTML</span></div>
+            <span class="updated">2026/02/16</span>
+          </div>
+        </div>
+        <div class="card-arrow">→</div>
+      </a>
+      <a href="https://github.com/hideo-t/NovelForge" target="_blank" rel="noopener" class="repo-link" title="ソースコード">📂</a>
+    </div>
+    <div class="card-wrap">
+      <a href="https://hideo-t.github.io/NovelForgeInvestment/" target="_blank" rel="noopener" class="card has-pages"
+         data-name="novelforgeinvestment" data-desc="" data-stars="0" data-pages="1">
+        <div class="card-icon">🌐</div>
+        <div class="card-body">
+          <div class="card-header">
+            <h3 class="card-title">NovelForgeInvestment</h3>
+            <span class="live-dot" title="公開中">● LIVE</span>
+          </div>
+          
+          <div class="card-footer">
+            <div class="badges"><span class="badge lang">HTML</span></div>
+            <span class="updated">2026/02/15</span>
+          </div>
+        </div>
+        <div class="card-arrow">→</div>
+      </a>
+      <a href="https://github.com/hideo-t/NovelForgeInvestment" target="_blank" rel="noopener" class="repo-link" title="ソースコード">📂</a>
+    </div>
+    <div class="card-wrap">
+      <a href="https://hideo-t.github.io/NovelForgeInvestmentEN/" target="_blank" rel="noopener" class="card has-pages"
+         data-name="novelforgeinvestmenten" data-desc="" data-stars="0" data-pages="1">
+        <div class="card-icon">🌐</div>
+        <div class="card-body">
+          <div class="card-header">
+            <h3 class="card-title">NovelForgeInvestmentEN</h3>
+            <span class="live-dot" title="公開中">● LIVE</span>
+          </div>
+          
+          <div class="card-footer">
+            <div class="badges"><span class="badge lang">HTML</span></div>
+            <span class="updated">2026/02/15</span>
+          </div>
+        </div>
+        <div class="card-arrow">→</div>
+      </a>
+      <a href="https://github.com/hideo-t/NovelForgeInvestmentEN" target="_blank" rel="noopener" class="repo-link" title="ソースコード">📂</a>
+    </div>
+    <div class="card-wrap">
+      <a href="https://hideo-t.github.io/NovelForge3/" target="_blank" rel="noopener" class="card has-pages"
+         data-name="novelforge3" data-desc="" data-stars="0" data-pages="1">
+        <div class="card-icon">🌐</div>
+        <div class="card-body">
+          <div class="card-header">
+            <h3 class="card-title">NovelForge3</h3>
+            <span class="live-dot" title="公開中">● LIVE</span>
+          </div>
+          
+          <div class="card-footer">
+            <div class="badges"><span class="badge lang">HTML</span></div>
+            <span class="updated">2026/02/15</span>
+          </div>
+        </div>
+        <div class="card-arrow">→</div>
+      </a>
+      <a href="https://github.com/hideo-t/NovelForge3" target="_blank" rel="noopener" class="repo-link" title="ソースコード">📂</a>
+    </div>
+    <div class="card-wrap">
+      <a href="https://hideo-t.github.io/NovelForgeED/" target="_blank" rel="noopener" class="card has-pages"
+         data-name="novelforgeed" data-desc="" data-stars="0" data-pages="1">
+        <div class="card-icon">🌐</div>
+        <div class="card-body">
+          <div class="card-header">
+            <h3 class="card-title">NovelForgeED</h3>
+            <span class="live-dot" title="公開中">● LIVE</span>
+          </div>
+          
+          <div class="card-footer">
+            <div class="badges"><span class="badge lang">HTML</span></div>
+            <span class="updated">2026/02/15</span>
+          </div>
+        </div>
+        <div class="card-arrow">→</div>
+      </a>
+      <a href="https://github.com/hideo-t/NovelForgeED" target="_blank" rel="noopener" class="repo-link" title="ソースコード">📂</a>
+    </div>
+    <div class="card-wrap">
+      <a href="https://hideo-t.github.io/NovelForgeC/" target="_blank" rel="noopener" class="card has-pages"
+         data-name="novelforgec" data-desc="" data-stars="0" data-pages="1">
+        <div class="card-icon">🌐</div>
+        <div class="card-body">
+          <div class="card-header">
+            <h3 class="card-title">NovelForgeC</h3>
+            <span class="live-dot" title="公開中">● LIVE</span>
+          </div>
+          
+          <div class="card-footer">
+            <div class="badges"><span class="badge lang">HTML</span></div>
+            <span class="updated">2026/02/15</span>
+          </div>
+        </div>
+        <div class="card-arrow">→</div>
+      </a>
+      <a href="https://github.com/hideo-t/NovelForgeC" target="_blank" rel="noopener" class="repo-link" title="ソースコード">📂</a>
+    </div>
+    <div class="card-wrap">
+      <a href="https://hideo-t.github.io/adventure-of-kuro-and-friends/" target="_blank" rel="noopener" class="card has-pages"
+         data-name="adventure-of-kuro-and-friends" data-desc="📖 五郎、けっこうとえっとりの大冒険 — ai generated novel" data-stars="0" data-pages="1">
+        <div class="card-icon">🌐</div>
+        <div class="card-body">
+          <div class="card-header">
+            <h3 class="card-title">adventure-of-kuro-and-friends</h3>
+            <span class="live-dot" title="公開中">● LIVE</span>
+          </div>
+          <p class="card-desc">📖 五郎、けっこうとえっとりの大冒険 — AI Generated Novel</p>
+          <div class="card-footer">
+            <div class="badges"><span class="badge lang">HTML</span></div>
+            <span class="updated">2026/02/15</span>
+          </div>
+        </div>
+        <div class="card-arrow">→</div>
+      </a>
+      <a href="https://github.com/hideo-t/adventure-of-kuro-and-friends" target="_blank" rel="noopener" class="repo-link" title="ソースコード">📂</a>
+    </div>
+    <div class="card-wrap">
+      <a href="https://hideo-t.github.io/secret-of-the-city-night/" target="_blank" rel="noopener" class="card has-pages"
+         data-name="secret-of-the-city-night" data-desc="📖 都会の秘密: 夜の音楽と心の渦巻き — ai generated novel" data-stars="0" data-pages="1">
+        <div class="card-icon">🌐</div>
+        <div class="card-body">
+          <div class="card-header">
+            <h3 class="card-title">secret-of-the-city-night</h3>
+            <span class="live-dot" title="公開中">● LIVE</span>
+          </div>
+          <p class="card-desc">📖 都会の秘密: 夜の音楽と心の渦巻き — AI Generated Novel</p>
+          <div class="card-footer">
+            <div class="badges"><span class="badge lang">HTML</span></div>
+            <span class="updated">2026/02/15</span>
+          </div>
+        </div>
+        <div class="card-arrow">→</div>
+      </a>
+      <a href="https://github.com/hideo-t/secret-of-the-city-night" target="_blank" rel="noopener" class="repo-link" title="ソースコード">📂</a>
+    </div>
+    <div class="card-wrap">
+      <a href="https://hideo-t.github.io/yamada-ken-taro-adventure/" target="_blank" rel="noopener" class="card has-pages"
+         data-name="yamada-ken-taro-adventure" data-desc="📖 57歳の冒険: 新しい旅立ち — ai generated novel" data-stars="0" data-pages="1">
+        <div class="card-icon">🌐</div>
+        <div class="card-body">
+          <div class="card-header">
+            <h3 class="card-title">yamada-ken-taro-adventure</h3>
+            <span class="live-dot" title="公開中">● LIVE</span>
+          </div>
+          <p class="card-desc">📖 57歳の冒険: 新しい旅立ち — AI Generated Novel</p>
+          <div class="card-footer">
+            <div class="badges"><span class="badge lang">HTML</span></div>
+            <span class="updated">2026/02/15</span>
+          </div>
+        </div>
+        <div class="card-arrow">→</div>
+      </a>
+      <a href="https://github.com/hideo-t/yamada-ken-taro-adventure" target="_blank" rel="noopener" class="repo-link" title="ソースコード">📂</a>
+    </div>
+    <div class="card-wrap">
+      <a href="https://hideo-t.github.io/adventure-of-fifty-six-year-old-man-v001/" target="_blank" rel="noopener" class="card has-pages"
+         data-name="adventure-of-fifty-six-year-old-man-v001" data-desc="📖 56歳のおっさんの冒険 — ai generated novel" data-stars="0" data-pages="1">
+        <div class="card-icon">🌐</div>
+        <div class="card-body">
+          <div class="card-header">
+            <h3 class="card-title">adventure-of-fifty-six-year-old-man-v001</h3>
+            <span class="live-dot" title="公開中">● LIVE</span>
+          </div>
+          <p class="card-desc">📖 56歳のおっさんの冒険 — AI Generated Novel</p>
+          <div class="card-footer">
+            <div class="badges"><span class="badge lang">HTML</span></div>
+            <span class="updated">2026/02/15</span>
+          </div>
+        </div>
+        <div class="card-arrow">→</div>
+      </a>
+      <a href="https://github.com/hideo-t/adventure-of-fifty-six-year-old-man-v001" target="_blank" rel="noopener" class="repo-link" title="ソースコード">📂</a>
+    </div>
+    <div class="card-wrap">
+      <a href="https://hideo-t.github.io/adventure-of-fifty-six-year-old-man/" target="_blank" rel="noopener" class="card has-pages"
+         data-name="adventure-of-fifty-six-year-old-man" data-desc="📖 56歳のおっさんの冒険 — ai generated novel" data-stars="0" data-pages="1">
+        <div class="card-icon">🌐</div>
+        <div class="card-body">
+          <div class="card-header">
+            <h3 class="card-title">adventure-of-fifty-six-year-old-man</h3>
+            <span class="live-dot" title="公開中">● LIVE</span>
+          </div>
+          <p class="card-desc">📖 56歳のおっさんの冒険 — AI Generated Novel</p>
+          <div class="card-footer">
+            <div class="badges"><span class="badge lang">HTML</span></div>
+            <span class="updated">2026/02/15</span>
+          </div>
+        </div>
+        <div class="card-arrow">→</div>
+      </a>
+      <a href="https://github.com/hideo-t/adventure-of-fifty-six-year-old-man" target="_blank" rel="noopener" class="repo-link" title="ソースコード">📂</a>
+    </div>
+    <div class="card-wrap">
+      <a href="https://hideo-t.github.io/world-of-eighteen-year-old-thoughts/" target="_blank" rel="noopener" class="card has-pages"
+         data-name="world-of-eighteen-year-old-thoughts" data-desc="📖 18歳の思い — ai generated novel" data-stars="0" data-pages="1">
+        <div class="card-icon">🌐</div>
+        <div class="card-body">
+          <div class="card-header">
+            <h3 class="card-title">world-of-eighteen-year-old-thoughts</h3>
+            <span class="live-dot" title="公開中">● LIVE</span>
+          </div>
+          <p class="card-desc">📖 18歳の思い — AI Generated Novel</p>
+          <div class="card-footer">
+            <div class="badges"><span class="badge lang">HTML</span></div>
+            <span class="updated">2026/02/15</span>
+          </div>
+        </div>
+        <div class="card-arrow">→</div>
+      </a>
+      <a href="https://github.com/hideo-t/world-of-eighteen-year-old-thoughts" target="_blank" rel="noopener" class="repo-link" title="ソースコード">📂</a>
+    </div>
+    <div class="card-wrap">
+      <a href="https://hideo-t.github.io/yui-19-years-of-life-v001/" target="_blank" rel="noopener" class="card has-pages"
+         data-name="yui-19-years-of-life-v001" data-desc="📖 19歳の春：新しい始まり — ai generated novel" data-stars="0" data-pages="1">
+        <div class="card-icon">🌐</div>
+        <div class="card-body">
+          <div class="card-header">
+            <h3 class="card-title">yui-19-years-of-life-v001</h3>
+            <span class="live-dot" title="公開中">● LIVE</span>
+          </div>
+          <p class="card-desc">📖 19歳の春：新しい始まり — AI Generated Novel</p>
+          <div class="card-footer">
+            <div class="badges"><span class="badge lang">HTML</span></div>
+            <span class="updated">2026/02/15</span>
+          </div>
+        </div>
+        <div class="card-arrow">→</div>
+      </a>
+      <a href="https://github.com/hideo-t/yui-19-years-of-life-v001" target="_blank" rel="noopener" class="repo-link" title="ソースコード">📂</a>
+    </div>
+    <div class="card-wrap">
+      <a href="https://hideo-t.github.io/yui-19-years-of-life/" target="_blank" rel="noopener" class="card has-pages"
+         data-name="yui-19-years-of-life" data-desc="📖 19歳の春：新しい始まり — ai generated novel" data-stars="0" data-pages="1">
+        <div class="card-icon">🌐</div>
+        <div class="card-body">
+          <div class="card-header">
+            <h3 class="card-title">yui-19-years-of-life</h3>
+            <span class="live-dot" title="公開中">● LIVE</span>
+          </div>
+          <p class="card-desc">📖 19歳の春：新しい始まり — AI Generated Novel</p>
+          <div class="card-footer">
+            <div class="badges"><span class="badge lang">HTML</span></div>
+            <span class="updated">2026/02/15</span>
+          </div>
+        </div>
+        <div class="card-arrow">→</div>
+      </a>
+      <a href="https://github.com/hideo-t/yui-19-years-of-life" target="_blank" rel="noopener" class="repo-link" title="ソースコード">📂</a>
+    </div>
+    <div class="card-wrap">
+      <a href="https://hideo-t.github.io/tearful-computer-journey/" target="_blank" rel="noopener" class="card has-pages"
+         data-name="tearful-computer-journey" data-desc="📖 涙を流すpc: スループット向上への道程 — ai generated novel" data-stars="0" data-pages="1">
+        <div class="card-icon">🌐</div>
+        <div class="card-body">
+          <div class="card-header">
+            <h3 class="card-title">tearful-computer-journey</h3>
+            <span class="live-dot" title="公開中">● LIVE</span>
+          </div>
+          <p class="card-desc">📖 涙を流すPC: スループット向上への道程 — AI Generated Novel</p>
+          <div class="card-footer">
+            <div class="badges"><span class="badge lang">HTML</span></div>
+            <span class="updated">2026/02/15</span>
+          </div>
+        </div>
+        <div class="card-arrow">→</div>
+      </a>
+      <a href="https://github.com/hideo-t/tearful-computer-journey" target="_blank" rel="noopener" class="repo-link" title="ソースコード">📂</a>
+    </div>
+    <div class="card-wrap">
+      <a href="https://hideo-t.github.io/mii-no-new-adventure/" target="_blank" rel="noopener" class="card has-pages"
+         data-name="mii-no-new-adventure" data-desc="📖 ミイの新しい冒険：三年後の春 — ai generated novel" data-stars="0" data-pages="1">
+        <div class="card-icon">🌐</div>
+        <div class="card-body">
+          <div class="card-header">
+            <h3 class="card-title">mii-no-new-adventure</h3>
+            <span class="live-dot" title="公開中">● LIVE</span>
+          </div>
+          <p class="card-desc">📖 ミイの新しい冒険：三年後の春 — AI Generated Novel</p>
+          <div class="card-footer">
+            <div class="badges"><span class="badge lang">HTML</span></div>
+            <span class="updated">2026/02/15</span>
+          </div>
+        </div>
+        <div class="card-arrow">→</div>
+      </a>
+      <a href="https://github.com/hideo-t/mii-no-new-adventure" target="_blank" rel="noopener" class="repo-link" title="ソースコード">📂</a>
+    </div>
+    <div class="card-wrap">
+      <a href="https://hideo-t.github.io/neko-no-madoguchi-wa-doko-desu-ka/" target="_blank" rel="noopener" class="card has-pages"
+         data-name="neko-no-madoguchi-wa-doko-desu-ka" data-desc="📖 おうちがもっと遠くに？ニャノ？ — ai generated novel" data-stars="0" data-pages="1">
+        <div class="card-icon">🌐</div>
+        <div class="card-body">
+          <div class="card-header">
+            <h3 class="card-title">neko-no-madoguchi-wa-doko-desu-ka</h3>
+            <span class="live-dot" title="公開中">● LIVE</span>
+          </div>
+          <p class="card-desc">📖 おうちがもっと遠くに？ニャノ？ — AI Generated Novel</p>
+          <div class="card-footer">
+            <div class="badges"><span class="badge lang">HTML</span></div>
+            <span class="updated">2026/02/15</span>
+          </div>
+        </div>
+        <div class="card-arrow">→</div>
+      </a>
+      <a href="https://github.com/hideo-t/neko-no-madoguchi-wa-doko-desu-ka" target="_blank" rel="noopener" class="repo-link" title="ソースコード">📂</a>
+    </div>
+    <div class="card-wrap">
+      <a href="https://hideo-t.github.io/onigiri-daisenso-sequel/" target="_blank" rel="noopener" class="card has-pages"
+         data-name="onigiri-daisenso-sequel" data-desc="📖 おにぎり大戦 ─ 再来の敵へ — ai generated novel" data-stars="0" data-pages="1">
+        <div class="card-icon">🌐</div>
+        <div class="card-body">
+          <div class="card-header">
+            <h3 class="card-title">onigiri-daisenso-sequel</h3>
+            <span class="live-dot" title="公開中">● LIVE</span>
+          </div>
+          <p class="card-desc">📖 おにぎり大戦 ─ 再来の敵へ — AI Generated Novel</p>
+          <div class="card-footer">
+            <div class="badges"><span class="badge lang">HTML</span></div>
+            <span class="updated">2026/02/15</span>
+          </div>
+        </div>
+        <div class="card-arrow">→</div>
+      </a>
+      <a href="https://github.com/hideo-t/onigiri-daisenso-sequel" target="_blank" rel="noopener" class="repo-link" title="ソースコード">📂</a>
+    </div>
+    <div class="card-wrap">
+      <a href="https://github.com/hideo-t/-nyan-no-jidai-nyano" target="_blank" rel="noopener" class="card"
+         data-name="-nyan-no-jidai-nyano" data-desc="📖 3年後の運命、ニャノ？ — ai generated novel" data-stars="0" data-pages="0">
+        <div class="card-icon">📦</div>
+        <div class="card-body">
+          <div class="card-header">
+            <h3 class="card-title">-nyan-no-jidai-nyano</h3>
+          </div>
+          <p class="card-desc">📖 3年後の運命、ニャノ？ — AI Generated Novel</p>
+          <div class="card-footer">
+            <div class="badges"></div>
+            <span class="updated">2026/02/15</span>
+          </div>
+        </div>
+        <div class="card-arrow">→</div>
+      </a>
+    </div>
+    <div class="card-wrap">
+      <a href="https://hideo-t.github.io/hatsukoi-no-hanabira-v003/" target="_blank" rel="noopener" class="card has-pages"
+         data-name="hatsukoi-no-hanabira-v003" data-desc="📖 初恋の花びら — ai generated novel" data-stars="0" data-pages="1">
+        <div class="card-icon">🌐</div>
+        <div class="card-body">
+          <div class="card-header">
+            <h3 class="card-title">hatsukoi-no-hanabira-v003</h3>
+            <span class="live-dot" title="公開中">● LIVE</span>
+          </div>
+          <p class="card-desc">📖 初恋の花びら — AI Generated Novel</p>
+          <div class="card-footer">
+            <div class="badges"><span class="badge lang">HTML</span></div>
+            <span class="updated">2026/02/15</span>
+          </div>
+        </div>
+        <div class="card-arrow">→</div>
+      </a>
+      <a href="https://github.com/hideo-t/hatsukoi-no-hanabira-v003" target="_blank" rel="noopener" class="repo-link" title="ソースコード">📂</a>
+    </div>
+    <div class="card-wrap">
+      <a href="https://hideo-t.github.io/hatsukoi-no-hanabira-v002/" target="_blank" rel="noopener" class="card has-pages"
+         data-name="hatsukoi-no-hanabira-v002" data-desc="📖 初恋の花びら — ai generated novel" data-stars="0" data-pages="1">
+        <div class="card-icon">🌐</div>
+        <div class="card-body">
+          <div class="card-header">
+            <h3 class="card-title">hatsukoi-no-hanabira-v002</h3>
+            <span class="live-dot" title="公開中">● LIVE</span>
+          </div>
+          <p class="card-desc">📖 初恋の花びら — AI Generated Novel</p>
+          <div class="card-footer">
+            <div class="badges"><span class="badge lang">HTML</span></div>
+            <span class="updated">2026/02/15</span>
+          </div>
+        </div>
+        <div class="card-arrow">→</div>
+      </a>
+      <a href="https://github.com/hideo-t/hatsukoi-no-hanabira-v002" target="_blank" rel="noopener" class="repo-link" title="ソースコード">📂</a>
+    </div>
+    <div class="card-wrap">
+      <a href="https://hideo-t.github.io/hatsukoi-no-hanabira-v001/" target="_blank" rel="noopener" class="card has-pages"
+         data-name="hatsukoi-no-hanabira-v001" data-desc="📖 初恋の花びら — ai generated novel" data-stars="0" data-pages="1">
+        <div class="card-icon">🌐</div>
+        <div class="card-body">
+          <div class="card-header">
+            <h3 class="card-title">hatsukoi-no-hanabira-v001</h3>
+            <span class="live-dot" title="公開中">● LIVE</span>
+          </div>
+          <p class="card-desc">📖 初恋の花びら — AI Generated Novel</p>
+          <div class="card-footer">
+            <div class="badges"><span class="badge lang">HTML</span></div>
+            <span class="updated">2026/02/15</span>
+          </div>
+        </div>
+        <div class="card-arrow">→</div>
+      </a>
+      <a href="https://github.com/hideo-t/hatsukoi-no-hanabira-v001" target="_blank" rel="noopener" class="repo-link" title="ソースコード">📂</a>
+    </div>
+    <div class="card-wrap">
+      <a href="https://hideo-t.github.io/perfect-mom-life-journal-v002/" target="_blank" rel="noopener" class="card has-pages"
+         data-name="perfect-mom-life-journal-v002" data-desc="📖 完璧ママの日々奮闘記 — ai generated novel" data-stars="0" data-pages="1">
+        <div class="card-icon">🌐</div>
+        <div class="card-body">
+          <div class="card-header">
+            <h3 class="card-title">perfect-mom-life-journal-v002</h3>
+            <span class="live-dot" title="公開中">● LIVE</span>
+          </div>
+          <p class="card-desc">📖 完璧ママの日々奮闘記 — AI Generated Novel</p>
+          <div class="card-footer">
+            <div class="badges"><span class="badge lang">HTML</span></div>
+            <span class="updated">2026/02/15</span>
+          </div>
+        </div>
+        <div class="card-arrow">→</div>
+      </a>
+      <a href="https://github.com/hideo-t/perfect-mom-life-journal-v002" target="_blank" rel="noopener" class="repo-link" title="ソースコード">📂</a>
+    </div>
+    <div class="card-wrap">
+      <a href="https://hideo-t.github.io/perfect-mom-life-journal-v001/" target="_blank" rel="noopener" class="card has-pages"
+         data-name="perfect-mom-life-journal-v001" data-desc="📖 完璧ママの日々奮闘記 — ai generated novel" data-stars="0" data-pages="1">
+        <div class="card-icon">🌐</div>
+        <div class="card-body">
+          <div class="card-header">
+            <h3 class="card-title">perfect-mom-life-journal-v001</h3>
+            <span class="live-dot" title="公開中">● LIVE</span>
+          </div>
+          <p class="card-desc">📖 完璧ママの日々奮闘記 — AI Generated Novel</p>
+          <div class="card-footer">
+            <div class="badges"><span class="badge lang">HTML</span></div>
+            <span class="updated">2026/02/15</span>
+          </div>
+        </div>
+        <div class="card-arrow">→</div>
+      </a>
+      <a href="https://github.com/hideo-t/perfect-mom-life-journal-v001" target="_blank" rel="noopener" class="repo-link" title="ソースコード">📂</a>
+    </div>
+    <div class="card-wrap">
+      <a href="https://hideo-t.github.io/perfect-mom-life-journal/" target="_blank" rel="noopener" class="card has-pages"
+         data-name="perfect-mom-life-journal" data-desc="📖 完璧ママの日々奮闘記 — ai generated novel" data-stars="0" data-pages="1">
+        <div class="card-icon">🌐</div>
+        <div class="card-body">
+          <div class="card-header">
+            <h3 class="card-title">perfect-mom-life-journal</h3>
+            <span class="live-dot" title="公開中">● LIVE</span>
+          </div>
+          <p class="card-desc">📖 完璧ママの日々奮闘記 — AI Generated Novel</p>
+          <div class="card-footer">
+            <div class="badges"><span class="badge lang">HTML</span></div>
+            <span class="updated">2026/02/15</span>
+          </div>
+        </div>
+        <div class="card-arrow">→</div>
+      </a>
+      <a href="https://github.com/hideo-t/perfect-mom-life-journal" target="_blank" rel="noopener" class="repo-link" title="ソースコード">📂</a>
+    </div>
+    <div class="card-wrap">
+      <a href="https://hideo-t.github.io/yumiyumiko-v002/" target="_blank" rel="noopener" class="card has-pages"
+         data-name="yumiyumiko-v002" data-desc="📖 ゆみこのハミング ─ 歌で届ける小さな奇跡 — ai generated novel" data-stars="0" data-pages="1">
+        <div class="card-icon">🌐</div>
+        <div class="card-body">
+          <div class="card-header">
+            <h3 class="card-title">yumiyumiko-v002</h3>
+            <span class="live-dot" title="公開中">● LIVE</span>
+          </div>
+          <p class="card-desc">📖 ゆみこのハミング ─ 歌で届ける小さな奇跡 — AI Generated Novel</p>
+          <div class="card-footer">
+            <div class="badges"><span class="badge lang">HTML</span></div>
+            <span class="updated">2026/02/15</span>
+          </div>
+        </div>
+        <div class="card-arrow">→</div>
+      </a>
+      <a href="https://github.com/hideo-t/yumiyumiko-v002" target="_blank" rel="noopener" class="repo-link" title="ソースコード">📂</a>
+    </div>
+    <div class="card-wrap">
+      <a href="https://hideo-t.github.io/ninja-peace-journey/" target="_blank" rel="noopener" class="card has-pages"
+         data-name="ninja-peace-journey" data-desc="📖 女忍者の平和への道 — ai generated novel" data-stars="0" data-pages="1">
+        <div class="card-icon">🌐</div>
+        <div class="card-body">
+          <div class="card-header">
+            <h3 class="card-title">ninja-peace-journey</h3>
+            <span class="live-dot" title="公開中">● LIVE</span>
+          </div>
+          <p class="card-desc">📖 女忍者の平和への道 — AI Generated Novel</p>
+          <div class="card-footer">
+            <div class="badges"><span class="badge lang">HTML</span></div>
+            <span class="updated">2026/02/15</span>
+          </div>
+        </div>
+        <div class="card-arrow">→</div>
+      </a>
+      <a href="https://github.com/hideo-t/ninja-peace-journey" target="_blank" rel="noopener" class="repo-link" title="ソースコード">📂</a>
+    </div>
+    <div class="card-wrap">
+      <a href="https://hideo-t.github.io/takahashi-hideo/" target="_blank" rel="noopener" class="card has-pages"
+         data-name="takahashi-hideo" data-desc="📖 高橋秀夫 ── 名前が物語になる時 — ai generated novel" data-stars="0" data-pages="1">
+        <div class="card-icon">🌐</div>
+        <div class="card-body">
+          <div class="card-header">
+            <h3 class="card-title">takahashi-hideo</h3>
+            <span class="live-dot" title="公開中">● LIVE</span>
+          </div>
+          <p class="card-desc">📖 高橋秀夫 ── 名前が物語になる時 — AI Generated Novel</p>
+          <div class="card-footer">
+            <div class="badges"><span class="badge lang">HTML</span></div>
+            <span class="updated">2026/02/15</span>
+          </div>
+        </div>
+        <div class="card-arrow">→</div>
+      </a>
+      <a href="https://github.com/hideo-t/takahashi-hideo" target="_blank" rel="noopener" class="repo-link" title="ソースコード">📂</a>
+    </div>
+    <div class="card-wrap">
+      <a href="https://hideo-t.github.io/nideo/" target="_blank" rel="noopener" class="card has-pages"
+         data-name="nideo" data-desc="📖 3分で世界を量産する男 — ai generated novel" data-stars="0" data-pages="1">
+        <div class="card-icon">🌐</div>
+        <div class="card-body">
+          <div class="card-header">
+            <h3 class="card-title">nideo</h3>
+            <span class="live-dot" title="公開中">● LIVE</span>
+          </div>
+          <p class="card-desc">📖 3分で世界を量産する男 — AI Generated Novel</p>
+          <div class="card-footer">
+            <div class="badges"><span class="badge lang">HTML</span></div>
+            <span class="updated">2026/02/15</span>
+          </div>
+        </div>
+        <div class="card-arrow">→</div>
+      </a>
+      <a href="https://github.com/hideo-t/nideo" target="_blank" rel="noopener" class="repo-link" title="ソースコード">📂</a>
+    </div>
+    <div class="card-wrap">
+      <a href="https://hideo-t.github.io/yumiyumiko-v001/" target="_blank" rel="noopener" class="card has-pages"
+         data-name="yumiyumiko-v001" data-desc="📖 ゆみこのハミング ─ 歌で届ける小さな奇跡 — ai generated novel" data-stars="0" data-pages="1">
+        <div class="card-icon">🌐</div>
+        <div class="card-body">
+          <div class="card-header">
+            <h3 class="card-title">yumiyumiko-v001</h3>
+            <span class="live-dot" title="公開中">● LIVE</span>
+          </div>
+          <p class="card-desc">📖 ゆみこのハミング ─ 歌で届ける小さな奇跡 — AI Generated Novel</p>
+          <div class="card-footer">
+            <div class="badges"><span class="badge lang">HTML</span></div>
+            <span class="updated">2026/02/15</span>
+          </div>
+        </div>
+        <div class="card-arrow">→</div>
+      </a>
+      <a href="https://github.com/hideo-t/yumiyumiko-v001" target="_blank" rel="noopener" class="repo-link" title="ソースコード">📂</a>
+    </div>
+    <div class="card-wrap">
+      <a href="https://hideo-t.github.io/magichour-v001/" target="_blank" rel="noopener" class="card has-pages"
+         data-name="magichour-v001" data-desc="📖 magic hour ─ きっと思ったよりも素敵な日になる — ai generated novel" data-stars="0" data-pages="1">
+        <div class="card-icon">🌐</div>
+        <div class="card-body">
+          <div class="card-header">
+            <h3 class="card-title">magichour-v001</h3>
+            <span class="live-dot" title="公開中">● LIVE</span>
+          </div>
+          <p class="card-desc">📖 Magic Hour ─ きっと思ったよりも素敵な日になる — AI Generated Novel</p>
+          <div class="card-footer">
+            <div class="badges"><span class="badge lang">HTML</span></div>
+            <span class="updated">2026/02/15</span>
+          </div>
+        </div>
+        <div class="card-arrow">→</div>
+      </a>
+      <a href="https://github.com/hideo-t/magichour-v001" target="_blank" rel="noopener" class="repo-link" title="ソースコード">📂</a>
+    </div>
+    <div class="card-wrap">
+      <a href="https://hideo-t.github.io/nekonekoneko-v001/" target="_blank" rel="noopener" class="card has-pages"
+         data-name="nekonekoneko-v001" data-desc="📖 ねこねこねこ ─ 32日間の冒険 — ai generated novel" data-stars="0" data-pages="1">
+        <div class="card-icon">🌐</div>
+        <div class="card-body">
+          <div class="card-header">
+            <h3 class="card-title">nekonekoneko-v001</h3>
+            <span class="live-dot" title="公開中">● LIVE</span>
+          </div>
+          <p class="card-desc">📖 ねこねこねこ ─ 32日間の冒険 — AI Generated Novel</p>
+          <div class="card-footer">
+            <div class="badges"><span class="badge lang">HTML</span></div>
+            <span class="updated">2026/02/15</span>
+          </div>
+        </div>
+        <div class="card-arrow">→</div>
+      </a>
+      <a href="https://github.com/hideo-t/nekonekoneko-v001" target="_blank" rel="noopener" class="repo-link" title="ソースコード">📂</a>
+    </div>
+    <div class="card-wrap">
+      <a href="https://hideo-t.github.io/nekonekoneko/" target="_blank" rel="noopener" class="card has-pages"
+         data-name="nekonekoneko" data-desc="📖 ねこねこねこ ─ 32日間の冒険 — ai generated novel" data-stars="0" data-pages="1">
+        <div class="card-icon">🌐</div>
+        <div class="card-body">
+          <div class="card-header">
+            <h3 class="card-title">nekonekoneko</h3>
+            <span class="live-dot" title="公開中">● LIVE</span>
+          </div>
+          <p class="card-desc">📖 ねこねこねこ ─ 32日間の冒険 — AI Generated Novel</p>
+          <div class="card-footer">
+            <div class="badges"><span class="badge lang">HTML</span></div>
+            <span class="updated">2026/02/15</span>
+          </div>
+        </div>
+        <div class="card-arrow">→</div>
+      </a>
+      <a href="https://github.com/hideo-t/nekonekoneko" target="_blank" rel="noopener" class="repo-link" title="ソースコード">📂</a>
+    </div>
+    <div class="card-wrap">
+      <a href="https://hideo-t.github.io/nyankokaerezu/" target="_blank" rel="noopener" class="card has-pages"
+         data-name="nyankokaerezu" data-desc="📖 おうちはどこ？ニャノ？ — ai generated novel" data-stars="0" data-pages="1">
+        <div class="card-icon">🌐</div>
+        <div class="card-body">
+          <div class="card-header">
+            <h3 class="card-title">nyankokaerezu</h3>
+            <span class="live-dot" title="公開中">● LIVE</span>
+          </div>
+          <p class="card-desc">📖 おうちはどこ？ニャノ？ — AI Generated Novel</p>
+          <div class="card-footer">
+            <div class="badges"><span class="badge lang">HTML</span></div>
+            <span class="updated">2026/02/15</span>
+          </div>
+        </div>
+        <div class="card-arrow">→</div>
+      </a>
+      <a href="https://github.com/hideo-t/nyankokaerezu" target="_blank" rel="noopener" class="repo-link" title="ソースコード">📂</a>
+    </div>
+    <div class="card-wrap">
+      <a href="https://hideo-t.github.io/mimihonki/" target="_blank" rel="noopener" class="card has-pages"
+         data-name="mimihonki" data-desc="📖 ミミの本気 — ai generated novel" data-stars="0" data-pages="1">
+        <div class="card-icon">🌐</div>
+        <div class="card-body">
+          <div class="card-header">
+            <h3 class="card-title">mimihonki</h3>
+            <span class="live-dot" title="公開中">● LIVE</span>
+          </div>
+          <p class="card-desc">📖 ミミの本気 — AI Generated Novel</p>
+          <div class="card-footer">
+            <div class="badges"><span class="badge lang">HTML</span></div>
+            <span class="updated">2026/02/15</span>
+          </div>
+        </div>
+        <div class="card-arrow">→</div>
+      </a>
+      <a href="https://github.com/hideo-t/mimihonki" target="_blank" rel="noopener" class="repo-link" title="ソースコード">📂</a>
+    </div>
+    <div class="card-wrap">
+      <a href="https://hideo-t.github.io/mimi-no-kaerimichi-v002/" target="_blank" rel="noopener" class="card has-pages"
+         data-name="mimi-no-kaerimichi-v002" data-desc="📖 ミミの帰り道 ─ 32日間の冒険 — ai generated novel" data-stars="0" data-pages="1">
+        <div class="card-icon">🌐</div>
+        <div class="card-body">
+          <div class="card-header">
+            <h3 class="card-title">mimi-no-kaerimichi-v002</h3>
+            <span class="live-dot" title="公開中">● LIVE</span>
+          </div>
+          <p class="card-desc">📖 ミミの帰り道 ─ 32日間の冒険 — AI Generated Novel</p>
+          <div class="card-footer">
+            <div class="badges"><span class="badge lang">HTML</span></div>
+            <span class="updated">2026/02/15</span>
+          </div>
+        </div>
+        <div class="card-arrow">→</div>
+      </a>
+      <a href="https://github.com/hideo-t/mimi-no-kaerimichi-v002" target="_blank" rel="noopener" class="repo-link" title="ソースコード">📂</a>
+    </div>
+    <div class="card-wrap">
+      <a href="https://hideo-t.github.io/mimi-no-kaerimichi-v001/" target="_blank" rel="noopener" class="card has-pages"
+         data-name="mimi-no-kaerimichi-v001" data-desc="📖 ミミの帰り道 ─ 32日間の冒険 — ai generated novel" data-stars="0" data-pages="1">
+        <div class="card-icon">🌐</div>
+        <div class="card-body">
+          <div class="card-header">
+            <h3 class="card-title">mimi-no-kaerimichi-v001</h3>
+            <span class="live-dot" title="公開中">● LIVE</span>
+          </div>
+          <p class="card-desc">📖 ミミの帰り道 ─ 32日間の冒険 — AI Generated Novel</p>
+          <div class="card-footer">
+            <div class="badges"><span class="badge lang">HTML</span></div>
+            <span class="updated">2026/02/15</span>
+          </div>
+        </div>
+        <div class="card-arrow">→</div>
+      </a>
+      <a href="https://github.com/hideo-t/mimi-no-kaerimichi-v001" target="_blank" rel="noopener" class="repo-link" title="ソースコード">📂</a>
+    </div>
+    <div class="card-wrap">
+      <a href="https://hideo-t.github.io/mimi-no-kaerimichi/" target="_blank" rel="noopener" class="card has-pages"
+         data-name="mimi-no-kaerimichi" data-desc="📖 ミミの帰り道 ─ 32日間の冒険 — ai generated novel" data-stars="0" data-pages="1">
+        <div class="card-icon">🌐</div>
+        <div class="card-body">
+          <div class="card-header">
+            <h3 class="card-title">mimi-no-kaerimichi</h3>
+            <span class="live-dot" title="公開中">● LIVE</span>
+          </div>
+          <p class="card-desc">📖 ミミの帰り道 ─ 32日間の冒険 — AI Generated Novel</p>
+          <div class="card-footer">
+            <div class="badges"><span class="badge lang">HTML</span></div>
+            <span class="updated">2026/02/15</span>
+          </div>
+        </div>
+        <div class="card-arrow">→</div>
+      </a>
+      <a href="https://github.com/hideo-t/mimi-no-kaerimichi" target="_blank" rel="noopener" class="repo-link" title="ソースコード">📂</a>
+    </div>
+    <div class="card-wrap">
+      <a href="https://hideo-t.github.io/onigiritaisen/" target="_blank" rel="noopener" class="card has-pages"
+         data-name="onigiritaisen" data-desc="📖 おにぎり大戦 ─ 最後の一粒まで — ai generated novel" data-stars="0" data-pages="1">
+        <div class="card-icon">🌐</div>
+        <div class="card-body">
+          <div class="card-header">
+            <h3 class="card-title">onigiritaisen</h3>
+            <span class="live-dot" title="公開中">● LIVE</span>
+          </div>
+          <p class="card-desc">📖 おにぎり大戦 ─ 最後の一粒まで — AI Generated Novel</p>
+          <div class="card-footer">
+            <div class="badges"><span class="badge lang">HTML</span></div>
+            <span class="updated">2026/02/15</span>
+          </div>
+        </div>
+        <div class="card-arrow">→</div>
+      </a>
+      <a href="https://github.com/hideo-t/onigiritaisen" target="_blank" rel="noopener" class="repo-link" title="ソースコード">📂</a>
+    </div>
+    <div class="card-wrap">
+      <a href="https://hideo-t.github.io/yumiyumiko/" target="_blank" rel="noopener" class="card has-pages"
+         data-name="yumiyumiko" data-desc="📖 ゆみこのハミング ─ 歌で届ける小さな奇跡 — ai generated novel" data-stars="0" data-pages="1">
+        <div class="card-icon">🌐</div>
+        <div class="card-body">
+          <div class="card-header">
+            <h3 class="card-title">yumiyumiko</h3>
+            <span class="live-dot" title="公開中">● LIVE</span>
+          </div>
+          <p class="card-desc">📖 ゆみこのハミング ─ 歌で届ける小さな奇跡 — AI Generated Novel</p>
+          <div class="card-footer">
+            <div class="badges"><span class="badge lang">HTML</span></div>
+            <span class="updated">2026/02/15</span>
+          </div>
+        </div>
+        <div class="card-arrow">→</div>
+      </a>
+      <a href="https://github.com/hideo-t/yumiyumiko" target="_blank" rel="noopener" class="repo-link" title="ソースコード">📂</a>
+    </div>
+    <div class="card-wrap">
+      <a href="https://hideo-t.github.io/magichour/" target="_blank" rel="noopener" class="card has-pages"
+         data-name="magichour" data-desc="📖 magichour — ai generated novel" data-stars="0" data-pages="1">
+        <div class="card-icon">🌐</div>
+        <div class="card-body">
+          <div class="card-header">
+            <h3 class="card-title">magichour</h3>
+            <span class="live-dot" title="公開中">● LIVE</span>
+          </div>
+          <p class="card-desc">📖 MagicHour — AI Generated Novel</p>
+          <div class="card-footer">
+            <div class="badges"><span class="badge lang">HTML</span></div>
+            <span class="updated">2026/02/15</span>
+          </div>
+        </div>
+        <div class="card-arrow">→</div>
+      </a>
+      <a href="https://github.com/hideo-t/magichour" target="_blank" rel="noopener" class="repo-link" title="ソースコード">📂</a>
+    </div>
+    <div class="card-wrap">
+      <a href="https://hideo-t.github.io/tsuduku/" target="_blank" rel="noopener" class="card has-pages"
+         data-name="tsuduku" data-desc="📖 つづく ─ 名前も知らないやさしい君へ — ai generated novel" data-stars="0" data-pages="1">
+        <div class="card-icon">🌐</div>
+        <div class="card-body">
+          <div class="card-header">
+            <h3 class="card-title">tsuduku</h3>
+            <span class="live-dot" title="公開中">● LIVE</span>
+          </div>
+          <p class="card-desc">📖 つづく ─ 名前も知らないやさしい君へ — AI Generated Novel</p>
+          <div class="card-footer">
+            <div class="badges"><span class="badge lang">HTML</span></div>
+            <span class="updated">2026/02/15</span>
+          </div>
+        </div>
+        <div class="card-arrow">→</div>
+      </a>
+      <a href="https://github.com/hideo-t/tsuduku" target="_blank" rel="noopener" class="repo-link" title="ソースコード">📂</a>
+    </div>
+    <div class="card-wrap">
+      <a href="https://hideo-t.github.io/sekaiou-echoes/" target="_blank" rel="noopener" class="card has-pages"
+         data-name="sekaiou-echoes" data-desc="📖 世界王 ― echoes of the forgotten — ai generated novel" data-stars="0" data-pages="1">
+        <div class="card-icon">🌐</div>
+        <div class="card-body">
+          <div class="card-header">
+            <h3 class="card-title">sekaiou-echoes</h3>
+            <span class="live-dot" title="公開中">● LIVE</span>
+          </div>
+          <p class="card-desc">📖 世界王 ― Echoes of the Forgotten — AI Generated Novel</p>
+          <div class="card-footer">
+            <div class="badges"><span class="badge lang">HTML</span></div>
+            <span class="updated">2026/02/14</span>
+          </div>
+        </div>
+        <div class="card-arrow">→</div>
+      </a>
+      <a href="https://github.com/hideo-t/sekaiou-echoes" target="_blank" rel="noopener" class="repo-link" title="ソースコード">📂</a>
+    </div>
+    <div class="card-wrap">
+      <a href="https://hideo-t.github.io/gtmasa/" target="_blank" rel="noopener" class="card has-pages"
+         data-name="gtmasa" data-desc="📖 gtmasa ─ ギターを置いた夜に — ai generated novel" data-stars="0" data-pages="1">
+        <div class="card-icon">🌐</div>
+        <div class="card-body">
+          <div class="card-header">
+            <h3 class="card-title">gtmasa</h3>
+            <span class="live-dot" title="公開中">● LIVE</span>
+          </div>
+          <p class="card-desc">📖 gtmasa ─ ギターを置いた夜に — AI Generated Novel</p>
+          <div class="card-footer">
+            <div class="badges"><span class="badge lang">HTML</span></div>
+            <span class="updated">2026/02/14</span>
+          </div>
+        </div>
+        <div class="card-arrow">→</div>
+      </a>
+      <a href="https://github.com/hideo-t/gtmasa" target="_blank" rel="noopener" class="repo-link" title="ソースコード">📂</a>
+    </div>
+    <div class="card-wrap">
+      <a href="https://hideo-t.github.io/ashen-starfield-novel/" target="_blank" rel="noopener" class="card has-pages"
+         data-name="ashen-starfield-novel" data-desc="📖 灰色の星海 ─ ashen starfield — ai generated novel" data-stars="0" data-pages="1">
+        <div class="card-icon">🌐</div>
+        <div class="card-body">
+          <div class="card-header">
+            <h3 class="card-title">ashen-starfield-novel</h3>
+            <span class="live-dot" title="公開中">● LIVE</span>
+          </div>
+          <p class="card-desc">📖 灰色の星海 ─ Ashen Starfield — AI Generated Novel</p>
+          <div class="card-footer">
+            <div class="badges"><span class="badge lang">HTML</span></div>
+            <span class="updated">2026/02/14</span>
+          </div>
+        </div>
+        <div class="card-arrow">→</div>
+      </a>
+      <a href="https://github.com/hideo-t/ashen-starfield-novel" target="_blank" rel="noopener" class="repo-link" title="ソースコード">📂</a>
+    </div>
+    <div class="card-wrap">
+      <a href="https://hideo-t.github.io/echoes-of-the-forgotten/" target="_blank" rel="noopener" class="card has-pages"
+         data-name="echoes-of-the-forgotten" data-desc="" data-stars="0" data-pages="1">
+        <div class="card-icon">🌐</div>
+        <div class="card-body">
+          <div class="card-header">
+            <h3 class="card-title">echoes-of-the-forgotten</h3>
+            <span class="live-dot" title="公開中">● LIVE</span>
+          </div>
+          
+          <div class="card-footer">
+            <div class="badges"><span class="badge lang">HTML</span></div>
+            <span class="updated">2026/02/14</span>
+          </div>
+        </div>
+        <div class="card-arrow">→</div>
+      </a>
+      <a href="https://github.com/hideo-t/echoes-of-the-forgotten" target="_blank" rel="noopener" class="repo-link" title="ソースコード">📂</a>
+    </div>
+    <div class="card-wrap">
+      <a href="https://hideo-t.github.io/palm-okinawa-fortune/" target="_blank" rel="noopener" class="card has-pages"
+         data-name="palm-okinawa-fortune" data-desc="auto-generated: palm-okinawa-fortune" data-stars="0" data-pages="1">
+        <div class="card-icon">🌐</div>
+        <div class="card-body">
+          <div class="card-header">
+            <h3 class="card-title">palm-okinawa-fortune</h3>
+            <span class="live-dot" title="公開中">● LIVE</span>
+          </div>
+          <p class="card-desc">Auto-generated: palm-okinawa-fortune</p>
+          <div class="card-footer">
+            <div class="badges"><span class="badge lang">HTML</span></div>
+            <span class="updated">2026/02/14</span>
+          </div>
+        </div>
+        <div class="card-arrow">→</div>
+      </a>
+      <a href="https://github.com/hideo-t/palm-okinawa-fortune" target="_blank" rel="noopener" class="repo-link" title="ソースコード">📂</a>
+    </div>
+    <div class="card-wrap">
+      <a href="https://hideo-t.github.io/okinawa-palm-reading-goddess/" target="_blank" rel="noopener" class="card has-pages"
+         data-name="okinawa-palm-reading-goddess" data-desc="auto-generated: okinawa-palm-reading-goddess" data-stars="0" data-pages="1">
+        <div class="card-icon">🌐</div>
+        <div class="card-body">
+          <div class="card-header">
+            <h3 class="card-title">okinawa-palm-reading-goddess</h3>
+            <span class="live-dot" title="公開中">● LIVE</span>
+          </div>
+          <p class="card-desc">Auto-generated: okinawa-palm-reading-goddess</p>
+          <div class="card-footer">
+            <div class="badges"><span class="badge lang">HTML</span></div>
+            <span class="updated">2026/02/14</span>
+          </div>
+        </div>
+        <div class="card-arrow">→</div>
+      </a>
+      <a href="https://github.com/hideo-t/okinawa-palm-reading-goddess" target="_blank" rel="noopener" class="repo-link" title="ソースコード">📂</a>
+    </div>
+    <div class="card-wrap">
+      <a href="https://hideo-t.github.io/palm-okinawa/" target="_blank" rel="noopener" class="card has-pages"
+         data-name="palm-okinawa" data-desc="auto-generated: palm-okinawa" data-stars="0" data-pages="1">
+        <div class="card-icon">🌐</div>
+        <div class="card-body">
+          <div class="card-header">
+            <h3 class="card-title">palm-okinawa</h3>
+            <span class="live-dot" title="公開中">● LIVE</span>
+          </div>
+          <p class="card-desc">Auto-generated: palm-okinawa</p>
+          <div class="card-footer">
+            <div class="badges"><span class="badge lang">HTML</span></div>
+            <span class="updated">2026/02/14</span>
+          </div>
+        </div>
+        <div class="card-arrow">→</div>
+      </a>
+      <a href="https://github.com/hideo-t/palm-okinawa" target="_blank" rel="noopener" class="repo-link" title="ソースコード">📂</a>
+    </div>
+    <div class="card-wrap">
+      <a href="https://hideo-t.github.io/silver-newborn/" target="_blank" rel="noopener" class="card has-pages"
+         data-name="silver-newborn" data-desc="auto-generated: silver-newborn" data-stars="0" data-pages="1">
+        <div class="card-icon">🌐</div>
+        <div class="card-body">
+          <div class="card-header">
+            <h3 class="card-title">silver-newborn</h3>
+            <span class="live-dot" title="公開中">● LIVE</span>
+          </div>
+          <p class="card-desc">Auto-generated: silver-newborn</p>
+          <div class="card-footer">
+            <div class="badges"><span class="badge lang">HTML</span></div>
+            <span class="updated">2026/02/14</span>
+          </div>
+        </div>
+        <div class="card-arrow">→</div>
+      </a>
+      <a href="https://github.com/hideo-t/silver-newborn" target="_blank" rel="noopener" class="repo-link" title="ソースコード">📂</a>
+    </div>
+    <div class="card-wrap">
+      <a href="https://hideo-t.github.io/todays-boss-is-this-bird/" target="_blank" rel="noopener" class="card has-pages"
+         data-name="todays-boss-is-this-bird" data-desc="auto-generated: todays-boss-is-this-bird" data-stars="0" data-pages="1">
+        <div class="card-icon">🌐</div>
+        <div class="card-body">
+          <div class="card-header">
+            <h3 class="card-title">todays-boss-is-this-bird</h3>
+            <span class="live-dot" title="公開中">● LIVE</span>
+          </div>
+          <p class="card-desc">Auto-generated: todays-boss-is-this-bird</p>
+          <div class="card-footer">
+            <div class="badges"><span class="badge lang">HTML</span></div>
+            <span class="updated">2026/02/14</span>
+          </div>
+        </div>
+        <div class="card-arrow">→</div>
+      </a>
+      <a href="https://github.com/hideo-t/todays-boss-is-this-bird" target="_blank" rel="noopener" class="repo-link" title="ソースコード">📂</a>
+    </div>
+    <div class="card-wrap">
+      <a href="https://hideo-t.github.io/trowel-ar-skill-transfer/" target="_blank" rel="noopener" class="card has-pages"
+         data-name="trowel-ar-skill-transfer" data-desc="auto-generated: trowel-ar-skill-transfer" data-stars="0" data-pages="1">
+        <div class="card-icon">🌐</div>
+        <div class="card-body">
+          <div class="card-header">
+            <h3 class="card-title">trowel-ar-skill-transfer</h3>
+            <span class="live-dot" title="公開中">● LIVE</span>
+          </div>
+          <p class="card-desc">Auto-generated: trowel-ar-skill-transfer</p>
+          <div class="card-footer">
+            <div class="badges"><span class="badge lang">HTML</span></div>
+            <span class="updated">2026/02/13</span>
+          </div>
+        </div>
+        <div class="card-arrow">→</div>
+      </a>
+      <a href="https://github.com/hideo-t/trowel-ar-skill-transfer" target="_blank" rel="noopener" class="repo-link" title="ソースコード">📂</a>
+    </div>
+    <div class="card-wrap">
+      <a href="https://hideo-t.github.io/trowel-skill-transfer/" target="_blank" rel="noopener" class="card has-pages"
+         data-name="trowel-skill-transfer" data-desc="auto-generated: trowel-skill-transfer" data-stars="0" data-pages="1">
+        <div class="card-icon">🌐</div>
+        <div class="card-body">
+          <div class="card-header">
+            <h3 class="card-title">trowel-skill-transfer</h3>
+            <span class="live-dot" title="公開中">● LIVE</span>
+          </div>
+          <p class="card-desc">Auto-generated: trowel-skill-transfer</p>
+          <div class="card-footer">
+            <div class="badges"><span class="badge lang">HTML</span></div>
+            <span class="updated">2026/02/13</span>
+          </div>
+        </div>
+        <div class="card-arrow">→</div>
+      </a>
+      <a href="https://github.com/hideo-t/trowel-skill-transfer" target="_blank" rel="noopener" class="repo-link" title="ソースコード">📂</a>
+    </div>
+    <div class="card-wrap">
+      <a href="https://hideo-t.github.io/trowel-ar-skills-training/" target="_blank" rel="noopener" class="card has-pages"
+         data-name="trowel-ar-skills-training" data-desc="auto-generated: trowel-ar-skills-training" data-stars="0" data-pages="1">
+        <div class="card-icon">🌐</div>
+        <div class="card-body">
+          <div class="card-header">
+            <h3 class="card-title">trowel-ar-skills-training</h3>
+            <span class="live-dot" title="公開中">● LIVE</span>
+          </div>
+          <p class="card-desc">Auto-generated: trowel-ar-skills-training</p>
+          <div class="card-footer">
+            <div class="badges"><span class="badge lang">HTML</span></div>
+            <span class="updated">2026/02/13</span>
+          </div>
+        </div>
+        <div class="card-arrow">→</div>
+      </a>
+      <a href="https://github.com/hideo-t/trowel-ar-skills-training" target="_blank" rel="noopener" class="repo-link" title="ソースコード">📂</a>
+    </div>
+    <div class="card-wrap">
+      <a href="https://hideo-t.github.io/connect-construction-app/" target="_blank" rel="noopener" class="card has-pages"
+         data-name="connect-construction-app" data-desc="auto-generated: connect-construction-app" data-stars="0" data-pages="1">
+        <div class="card-icon">🌐</div>
+        <div class="card-body">
+          <div class="card-header">
+            <h3 class="card-title">connect-construction-app</h3>
+            <span class="live-dot" title="公開中">● LIVE</span>
+          </div>
+          <p class="card-desc">Auto-generated: connect-construction-app</p>
+          <div class="card-footer">
+            <div class="badges"><span class="badge lang">HTML</span></div>
+            <span class="updated">2026/02/13</span>
+          </div>
+        </div>
+        <div class="card-arrow">→</div>
+      </a>
+      <a href="https://github.com/hideo-t/connect-construction-app" target="_blank" rel="noopener" class="repo-link" title="ソースコード">📂</a>
+    </div>
+    <div class="card-wrap">
+      <a href="https://hideo-t.github.io/construction-connect-app/" target="_blank" rel="noopener" class="card has-pages"
+         data-name="construction-connect-app" data-desc="auto-generated: construction-connect-app" data-stars="0" data-pages="1">
+        <div class="card-icon">🌐</div>
+        <div class="card-body">
+          <div class="card-header">
+            <h3 class="card-title">construction-connect-app</h3>
+            <span class="live-dot" title="公開中">● LIVE</span>
+          </div>
+          <p class="card-desc">Auto-generated: construction-connect-app</p>
+          <div class="card-footer">
+            <div class="badges"><span class="badge lang">HTML</span></div>
+            <span class="updated">2026/02/13</span>
+          </div>
+        </div>
+        <div class="card-arrow">→</div>
+      </a>
+      <a href="https://github.com/hideo-t/construction-connect-app" target="_blank" rel="noopener" class="repo-link" title="ソースコード">📂</a>
+    </div>
+    <div class="card-wrap">
+      <a href="https://hideo-t.github.io/con-nect-construction-app/" target="_blank" rel="noopener" class="card has-pages"
+         data-name="con-nect-construction-app" data-desc="auto-generated: con-nect-construction-app" data-stars="0" data-pages="1">
+        <div class="card-icon">🌐</div>
+        <div class="card-body">
+          <div class="card-header">
+            <h3 class="card-title">con-nect-construction-app</h3>
+            <span class="live-dot" title="公開中">● LIVE</span>
+          </div>
+          <p class="card-desc">Auto-generated: con-nect-construction-app</p>
+          <div class="card-footer">
+            <div class="badges"><span class="badge lang">HTML</span></div>
+            <span class="updated">2026/02/13</span>
+          </div>
+        </div>
+        <div class="card-arrow">→</div>
+      </a>
+      <a href="https://github.com/hideo-t/con-nect-construction-app" target="_blank" rel="noopener" class="repo-link" title="ソースコード">📂</a>
+    </div>
+    <div class="card-wrap">
+      <a href="https://hideo-t.github.io/tape-wizard/" target="_blank" rel="noopener" class="card has-pages"
+         data-name="tape-wizard" data-desc="auto-generated: tape-wizard" data-stars="0" data-pages="1">
+        <div class="card-icon">🌐</div>
+        <div class="card-body">
+          <div class="card-header">
+            <h3 class="card-title">tape-wizard</h3>
+            <span class="live-dot" title="公開中">● LIVE</span>
+          </div>
+          <p class="card-desc">Auto-generated: tape-wizard</p>
+          <div class="card-footer">
+            <div class="badges"><span class="badge lang">HTML</span></div>
+            <span class="updated">2026/02/13</span>
+          </div>
+        </div>
+        <div class="card-arrow">→</div>
+      </a>
+      <a href="https://github.com/hideo-t/tape-wizard" target="_blank" rel="noopener" class="repo-link" title="ソースコード">📂</a>
+    </div>
+    <div class="card-wrap">
+      <a href="https://hideo-t.github.io/analog-war/" target="_blank" rel="noopener" class="card has-pages"
+         data-name="analog-war" data-desc="auto-generated: analog-war" data-stars="0" data-pages="1">
+        <div class="card-icon">🌐</div>
+        <div class="card-body">
+          <div class="card-header">
+            <h3 class="card-title">analog-war</h3>
+            <span class="live-dot" title="公開中">● LIVE</span>
+          </div>
+          <p class="card-desc">Auto-generated: analog-war</p>
+          <div class="card-footer">
+            <div class="badges"><span class="badge lang">HTML</span></div>
+            <span class="updated">2026/02/13</span>
+          </div>
+        </div>
+        <div class="card-arrow">→</div>
+      </a>
+      <a href="https://github.com/hideo-t/analog-war" target="_blank" rel="noopener" class="repo-link" title="ソースコード">📂</a>
+    </div>
+    <div class="card-wrap">
+      <a href="https://hideo-t.github.io/analog-war-needle-and-magnetic-apocalypse/" target="_blank" rel="noopener" class="card has-pages"
+         data-name="analog-war-needle-and-magnetic-apocalypse" data-desc="auto-generated: analog-war-needle-and-magnetic-apocalypse" data-stars="0" data-pages="1">
+        <div class="card-icon">🌐</div>
+        <div class="card-body">
+          <div class="card-header">
+            <h3 class="card-title">analog-war-needle-and-magnetic-apocalypse</h3>
+            <span class="live-dot" title="公開中">● LIVE</span>
+          </div>
+          <p class="card-desc">Auto-generated: analog-war-needle-and-magnetic-apocalypse</p>
+          <div class="card-footer">
+            <div class="badges"><span class="badge lang">HTML</span></div>
+            <span class="updated">2026/02/13</span>
+          </div>
+        </div>
+        <div class="card-arrow">→</div>
+      </a>
+      <a href="https://github.com/hideo-t/analog-war-needle-and-magnetic-apocalypse" target="_blank" rel="noopener" class="repo-link" title="ソースコード">📂</a>
+    </div>
+    <div class="card-wrap">
+      <a href="https://hideo-t.github.io/nyandemot-ari-kingdom/" target="_blank" rel="noopener" class="card has-pages"
+         data-name="nyandemot-ari-kingdom" data-desc="auto-generated: nyandemot-ari-kingdom" data-stars="0" data-pages="1">
+        <div class="card-icon">🌐</div>
+        <div class="card-body">
+          <div class="card-header">
+            <h3 class="card-title">nyandemot-ari-kingdom</h3>
+            <span class="live-dot" title="公開中">● LIVE</span>
+          </div>
+          <p class="card-desc">Auto-generated: nyandemot-ari-kingdom</p>
+          <div class="card-footer">
+            <div class="badges"><span class="badge lang">HTML</span></div>
+            <span class="updated">2026/02/13</span>
+          </div>
+        </div>
+        <div class="card-arrow">→</div>
+      </a>
+      <a href="https://github.com/hideo-t/nyandemot-ari-kingdom" target="_blank" rel="noopener" class="repo-link" title="ソースコード">📂</a>
+    </div>
+    <div class="card-wrap">
+      <a href="https://hideo-t.github.io/cat-chaos-kingdom/" target="_blank" rel="noopener" class="card has-pages"
+         data-name="cat-chaos-kingdom" data-desc="auto-generated: cat-chaos-kingdom" data-stars="0" data-pages="1">
+        <div class="card-icon">🌐</div>
+        <div class="card-body">
+          <div class="card-header">
+            <h3 class="card-title">cat-chaos-kingdom</h3>
+            <span class="live-dot" title="公開中">● LIVE</span>
+          </div>
+          <p class="card-desc">Auto-generated: cat-chaos-kingdom</p>
+          <div class="card-footer">
+            <div class="badges"><span class="badge lang">HTML</span></div>
+            <span class="updated">2026/02/13</span>
+          </div>
+        </div>
+        <div class="card-arrow">→</div>
+      </a>
+      <a href="https://github.com/hideo-t/cat-chaos-kingdom" target="_blank" rel="noopener" class="repo-link" title="ソースコード">📂</a>
+    </div>
+    <div class="card-wrap">
+      <a href="https://hideo-t.github.io/nyandemo-ari-kingdom/" target="_blank" rel="noopener" class="card has-pages"
+         data-name="nyandemo-ari-kingdom" data-desc="auto-generated: nyandemo-ari-kingdom" data-stars="0" data-pages="1">
+        <div class="card-icon">🌐</div>
+        <div class="card-body">
+          <div class="card-header">
+            <h3 class="card-title">nyandemo-ari-kingdom</h3>
+            <span class="live-dot" title="公開中">● LIVE</span>
+          </div>
+          <p class="card-desc">Auto-generated: nyandemo-ari-kingdom</p>
+          <div class="card-footer">
+            <div class="badges"><span class="badge lang">HTML</span></div>
+            <span class="updated">2026/02/13</span>
+          </div>
+        </div>
+        <div class="card-arrow">→</div>
+      </a>
+      <a href="https://github.com/hideo-t/nyandemo-ari-kingdom" target="_blank" rel="noopener" class="repo-link" title="ソースコード">📂</a>
+    </div>
+    <div class="card-wrap">
+      <a href="https://hideo-t.github.io/cake-mosaic-kingdom/" target="_blank" rel="noopener" class="card has-pages"
+         data-name="cake-mosaic-kingdom" data-desc="auto-generated: cake-mosaic-kingdom" data-stars="0" data-pages="1">
+        <div class="card-icon">🌐</div>
+        <div class="card-body">
+          <div class="card-header">
+            <h3 class="card-title">cake-mosaic-kingdom</h3>
+            <span class="live-dot" title="公開中">● LIVE</span>
+          </div>
+          <p class="card-desc">Auto-generated: cake-mosaic-kingdom</p>
+          <div class="card-footer">
+            <div class="badges"><span class="badge lang">HTML</span></div>
+            <span class="updated">2026/02/13</span>
+          </div>
+        </div>
+        <div class="card-arrow">→</div>
+      </a>
+      <a href="https://github.com/hideo-t/cake-mosaic-kingdom" target="_blank" rel="noopener" class="repo-link" title="ソースコード">📂</a>
+    </div>
+    <div class="card-wrap">
+      <a href="https://hideo-t.github.io/sugar-kingdom-cake-magic/" target="_blank" rel="noopener" class="card has-pages"
+         data-name="sugar-kingdom-cake-magic" data-desc="auto-generated: sugar-kingdom-cake-magic" data-stars="0" data-pages="1">
+        <div class="card-icon">🌐</div>
+        <div class="card-body">
+          <div class="card-header">
+            <h3 class="card-title">sugar-kingdom-cake-magic</h3>
+            <span class="live-dot" title="公開中">● LIVE</span>
+          </div>
+          <p class="card-desc">Auto-generated: sugar-kingdom-cake-magic</p>
+          <div class="card-footer">
+            <div class="badges"><span class="badge lang">HTML</span></div>
+            <span class="updated">2026/02/13</span>
+          </div>
+        </div>
+        <div class="card-arrow">→</div>
+      </a>
+      <a href="https://github.com/hideo-t/sugar-kingdom-cake-magic" target="_blank" rel="noopener" class="repo-link" title="ソースコード">📂</a>
+    </div>
+    <div class="card-wrap">
+      <a href="https://hideo-t.github.io/family-tree-tracker-0213-6nz/" target="_blank" rel="noopener" class="card has-pages"
+         data-name="family-tree-tracker-0213-6nz" data-desc="" data-stars="0" data-pages="1">
+        <div class="card-icon">🌐</div>
+        <div class="card-body">
+          <div class="card-header">
+            <h3 class="card-title">family-tree-tracker-0213-6nz</h3>
+            <span class="live-dot" title="公開中">● LIVE</span>
+          </div>
+          
+          <div class="card-footer">
+            <div class="badges"><span class="badge lang">HTML</span></div>
+            <span class="updated">2026/02/13</span>
+          </div>
+        </div>
+        <div class="card-arrow">→</div>
+      </a>
+      <a href="https://github.com/hideo-t/family-tree-tracker-0213-6nz" target="_blank" rel="noopener" class="repo-link" title="ソースコード">📂</a>
+    </div>
+    <div class="card-wrap">
+      <a href="https://hideo-t.github.io/audio-skill-certification/" target="_blank" rel="noopener" class="card has-pages"
+         data-name="audio-skill-certification" data-desc="auto-generated: audio-skill-certification" data-stars="0" data-pages="1">
+        <div class="card-icon">🌐</div>
+        <div class="card-body">
+          <div class="card-header">
+            <h3 class="card-title">audio-skill-certification</h3>
+            <span class="live-dot" title="公開中">● LIVE</span>
+          </div>
+          <p class="card-desc">Auto-generated: audio-skill-certification</p>
+          <div class="card-footer">
+            <div class="badges"><span class="badge lang">HTML</span></div>
+            <span class="updated">2026/02/13</span>
+          </div>
+        </div>
+        <div class="card-arrow">→</div>
+      </a>
+      <a href="https://github.com/hideo-t/audio-skill-certification" target="_blank" rel="noopener" class="repo-link" title="ソースコード">📂</a>
+    </div>
+    <div class="card-wrap">
+      <a href="https://hideo-t.github.io/sound-engineer-certification/" target="_blank" rel="noopener" class="card has-pages"
+         data-name="sound-engineer-certification" data-desc="auto-generated: sound-engineer-certification" data-stars="0" data-pages="1">
+        <div class="card-icon">🌐</div>
+        <div class="card-body">
+          <div class="card-header">
+            <h3 class="card-title">sound-engineer-certification</h3>
+            <span class="live-dot" title="公開中">● LIVE</span>
+          </div>
+          <p class="card-desc">Auto-generated: sound-engineer-certification</p>
+          <div class="card-footer">
+            <div class="badges"><span class="badge lang">HTML</span></div>
+            <span class="updated">2026/02/13</span>
+          </div>
+        </div>
+        <div class="card-arrow">→</div>
+      </a>
+      <a href="https://github.com/hideo-t/sound-engineer-certification" target="_blank" rel="noopener" class="repo-link" title="ソースコード">📂</a>
+    </div>
+    <div class="card-wrap">
+      <a href="https://hideo-t.github.io/audio-pa-skill-certification/" target="_blank" rel="noopener" class="card has-pages"
+         data-name="audio-pa-skill-certification" data-desc="auto-generated: audio-pa-skill-certification" data-stars="0" data-pages="1">
+        <div class="card-icon">🌐</div>
+        <div class="card-body">
+          <div class="card-header">
+            <h3 class="card-title">audio-pa-skill-certification</h3>
+            <span class="live-dot" title="公開中">● LIVE</span>
+          </div>
+          <p class="card-desc">Auto-generated: audio-pa-skill-certification</p>
+          <div class="card-footer">
+            <div class="badges"><span class="badge lang">HTML</span></div>
+            <span class="updated">2026/02/13</span>
+          </div>
+        </div>
+        <div class="card-arrow">→</div>
+      </a>
+      <a href="https://github.com/hideo-t/audio-pa-skill-certification" target="_blank" rel="noopener" class="repo-link" title="ソースコード">📂</a>
+    </div>
+    <div class="card-wrap">
+      <a href="https://hideo-t.github.io/pa-event-manager/" target="_blank" rel="noopener" class="card has-pages"
+         data-name="pa-event-manager" data-desc="auto-generated: pa-event-manager" data-stars="0" data-pages="1">
+        <div class="card-icon">🌐</div>
+        <div class="card-body">
+          <div class="card-header">
+            <h3 class="card-title">pa-event-manager</h3>
+            <span class="live-dot" title="公開中">● LIVE</span>
+          </div>
+          <p class="card-desc">Auto-generated: pa-event-manager</p>
+          <div class="card-footer">
+            <div class="badges"><span class="badge lang">HTML</span></div>
+            <span class="updated">2026/02/13</span>
+          </div>
+        </div>
+        <div class="card-arrow">→</div>
+      </a>
+      <a href="https://github.com/hideo-t/pa-event-manager" target="_blank" rel="noopener" class="repo-link" title="ソースコード">📂</a>
+    </div>
+    <div class="card-wrap">
+      <a href="https://hideo-t.github.io/genba-os-demo/" target="_blank" rel="noopener" class="card has-pages"
+         data-name="genba-os-demo" data-desc="auto-generated: genba-os-demo" data-stars="0" data-pages="1">
+        <div class="card-icon">🌐</div>
+        <div class="card-body">
+          <div class="card-header">
+            <h3 class="card-title">genba-os-demo</h3>
+            <span class="live-dot" title="公開中">● LIVE</span>
+          </div>
+          <p class="card-desc">Auto-generated: genba-os-demo</p>
+          <div class="card-footer">
+            <div class="badges"><span class="badge lang">HTML</span></div>
+            <span class="updated">2026/02/13</span>
+          </div>
+        </div>
+        <div class="card-arrow">→</div>
+      </a>
+      <a href="https://github.com/hideo-t/genba-os-demo" target="_blank" rel="noopener" class="repo-link" title="ソースコード">📂</a>
+    </div>
+    <div class="card-wrap">
+      <a href="https://hideo-t.github.io/genba-cost-lite/" target="_blank" rel="noopener" class="card has-pages"
+         data-name="genba-cost-lite" data-desc="auto-generated: genba-cost-lite" data-stars="0" data-pages="1">
+        <div class="card-icon">🌐</div>
+        <div class="card-body">
+          <div class="card-header">
+            <h3 class="card-title">genba-cost-lite</h3>
+            <span class="live-dot" title="公開中">● LIVE</span>
+          </div>
+          <p class="card-desc">Auto-generated: genba-cost-lite</p>
+          <div class="card-footer">
+            <div class="badges"><span class="badge lang">HTML</span></div>
+            <span class="updated">2026/02/13</span>
+          </div>
+        </div>
+        <div class="card-arrow">→</div>
+      </a>
+      <a href="https://github.com/hideo-t/genba-cost-lite" target="_blank" rel="noopener" class="repo-link" title="ソースコード">📂</a>
+    </div>
+    <div class="card-wrap">
+      <a href="https://hideo-t.github.io/progress-mini-manager/" target="_blank" rel="noopener" class="card has-pages"
+         data-name="progress-mini-manager" data-desc="auto-generated: progress-mini-manager" data-stars="0" data-pages="1">
+        <div class="card-icon">🌐</div>
+        <div class="card-body">
+          <div class="card-header">
+            <h3 class="card-title">progress-mini-manager</h3>
+            <span class="live-dot" title="公開中">● LIVE</span>
+          </div>
+          <p class="card-desc">Auto-generated: progress-mini-manager</p>
+          <div class="card-footer">
+            <div class="badges"><span class="badge lang">HTML</span></div>
+            <span class="updated">2026/02/13</span>
+          </div>
+        </div>
+        <div class="card-arrow">→</div>
+      </a>
+      <a href="https://github.com/hideo-t/progress-mini-manager" target="_blank" rel="noopener" class="repo-link" title="ソースコード">📂</a>
+    </div>
+    <div class="card-wrap">
+      <a href="https://hideo-t.github.io/genba-auto-doc-demo/" target="_blank" rel="noopener" class="card has-pages"
+         data-name="genba-auto-doc-demo" data-desc="auto-generated: genba-auto-doc-demo" data-stars="0" data-pages="1">
+        <div class="card-icon">🌐</div>
+        <div class="card-body">
+          <div class="card-header">
+            <h3 class="card-title">genba-auto-doc-demo</h3>
+            <span class="live-dot" title="公開中">● LIVE</span>
+          </div>
+          <p class="card-desc">Auto-generated: genba-auto-doc-demo</p>
+          <div class="card-footer">
+            <div class="badges"><span class="badge lang">HTML</span></div>
+            <span class="updated">2026/02/13</span>
+          </div>
+        </div>
+        <div class="card-arrow">→</div>
+      </a>
+      <a href="https://github.com/hideo-t/genba-auto-doc-demo" target="_blank" rel="noopener" class="repo-link" title="ソースコード">📂</a>
+    </div>
+    <div class="card-wrap">
+      <a href="https://hideo-t.github.io/genba-auto-doc/" target="_blank" rel="noopener" class="card has-pages"
+         data-name="genba-auto-doc" data-desc="auto-generated: genba-auto-doc" data-stars="0" data-pages="1">
+        <div class="card-icon">🌐</div>
+        <div class="card-body">
+          <div class="card-header">
+            <h3 class="card-title">genba-auto-doc</h3>
+            <span class="live-dot" title="公開中">● LIVE</span>
+          </div>
+          <p class="card-desc">Auto-generated: genba-auto-doc</p>
+          <div class="card-footer">
+            <div class="badges"><span class="badge lang">HTML</span></div>
+            <span class="updated">2026/02/13</span>
+          </div>
+        </div>
+        <div class="card-arrow">→</div>
+      </a>
+      <a href="https://github.com/hideo-t/genba-auto-doc" target="_blank" rel="noopener" class="repo-link" title="ソースコード">📂</a>
+    </div>
+    <div class="card-wrap">
+      <a href="https://hideo-t.github.io/genba-auto-doc-demo-0213-9k8/" target="_blank" rel="noopener" class="card has-pages"
+         data-name="genba-auto-doc-demo-0213-9k8" data-desc="" data-stars="0" data-pages="1">
+        <div class="card-icon">🌐</div>
+        <div class="card-body">
+          <div class="card-header">
+            <h3 class="card-title">genba-auto-doc-demo-0213-9k8</h3>
+            <span class="live-dot" title="公開中">● LIVE</span>
+          </div>
+          
+          <div class="card-footer">
+            <div class="badges"><span class="badge lang">HTML</span></div>
+            <span class="updated">2026/02/13</span>
+          </div>
+        </div>
+        <div class="card-arrow">→</div>
+      </a>
+      <a href="https://github.com/hideo-t/genba-auto-doc-demo-0213-9k8" target="_blank" rel="noopener" class="repo-link" title="ソースコード">📂</a>
+    </div>
+    <div class="card-wrap">
+      <a href="https://hideo-t.github.io/rental-car-management-system-0213-p3j/" target="_blank" rel="noopener" class="card has-pages"
+         data-name="rental-car-management-system-0213-p3j" data-desc="" data-stars="0" data-pages="1">
+        <div class="card-icon">🌐</div>
+        <div class="card-body">
+          <div class="card-header">
+            <h3 class="card-title">rental-car-management-system-0213-p3j</h3>
+            <span class="live-dot" title="公開中">● LIVE</span>
+          </div>
+          
+          <div class="card-footer">
+            <div class="badges"><span class="badge lang">HTML</span></div>
+            <span class="updated">2026/02/13</span>
+          </div>
+        </div>
+        <div class="card-arrow">→</div>
+      </a>
+      <a href="https://github.com/hideo-t/rental-car-management-system-0213-p3j" target="_blank" rel="noopener" class="repo-link" title="ソースコード">📂</a>
+    </div>
+    <div class="card-wrap">
+      <a href="https://hideo-t.github.io/rental-car-management-system-0213-36c/" target="_blank" rel="noopener" class="card has-pages"
+         data-name="rental-car-management-system-0213-36c" data-desc="" data-stars="0" data-pages="1">
+        <div class="card-icon">🌐</div>
+        <div class="card-body">
+          <div class="card-header">
+            <h3 class="card-title">rental-car-management-system-0213-36c</h3>
+            <span class="live-dot" title="公開中">● LIVE</span>
+          </div>
+          
+          <div class="card-footer">
+            <div class="badges"><span class="badge lang">HTML</span></div>
+            <span class="updated">2026/02/13</span>
+          </div>
+        </div>
+        <div class="card-arrow">→</div>
+      </a>
+      <a href="https://github.com/hideo-t/rental-car-management-system-0213-36c" target="_blank" rel="noopener" class="repo-link" title="ソースコード">📂</a>
+    </div>
+    <div class="card-wrap">
+      <a href="https://hideo-t.github.io/rental-car-management-system-0213-e1s/" target="_blank" rel="noopener" class="card has-pages"
+         data-name="rental-car-management-system-0213-e1s" data-desc="" data-stars="0" data-pages="1">
+        <div class="card-icon">🌐</div>
+        <div class="card-body">
+          <div class="card-header">
+            <h3 class="card-title">rental-car-management-system-0213-e1s</h3>
+            <span class="live-dot" title="公開中">● LIVE</span>
+          </div>
+          
+          <div class="card-footer">
+            <div class="badges"><span class="badge lang">HTML</span></div>
+            <span class="updated">2026/02/13</span>
+          </div>
+        </div>
+        <div class="card-arrow">→</div>
+      </a>
+      <a href="https://github.com/hideo-t/rental-car-management-system-0213-e1s" target="_blank" rel="noopener" class="repo-link" title="ソースコード">📂</a>
+    </div>
+    <div class="card-wrap">
+      <a href="https://hideo-t.github.io/child-scan-app-0213-3jj/" target="_blank" rel="noopener" class="card has-pages"
+         data-name="child-scan-app-0213-3jj" data-desc="" data-stars="0" data-pages="1">
+        <div class="card-icon">🌐</div>
+        <div class="card-body">
+          <div class="card-header">
+            <h3 class="card-title">child-scan-app-0213-3jj</h3>
+            <span class="live-dot" title="公開中">● LIVE</span>
+          </div>
+          
+          <div class="card-footer">
+            <div class="badges"><span class="badge lang">HTML</span></div>
+            <span class="updated">2026/02/12</span>
+          </div>
+        </div>
+        <div class="card-arrow">→</div>
+      </a>
+      <a href="https://github.com/hideo-t/child-scan-app-0213-3jj" target="_blank" rel="noopener" class="repo-link" title="ソースコード">📂</a>
+    </div>
+    <div class="card-wrap">
+      <a href="https://hideo-t.github.io/child-growth-tracker-0213-hj0/" target="_blank" rel="noopener" class="card has-pages"
+         data-name="child-growth-tracker-0213-hj0" data-desc="" data-stars="0" data-pages="1">
+        <div class="card-icon">🌐</div>
+        <div class="card-body">
+          <div class="card-header">
+            <h3 class="card-title">child-growth-tracker-0213-hj0</h3>
+            <span class="live-dot" title="公開中">● LIVE</span>
+          </div>
+          
+          <div class="card-footer">
+            <div class="badges"><span class="badge lang">HTML</span></div>
+            <span class="updated">2026/02/12</span>
+          </div>
+        </div>
+        <div class="card-arrow">→</div>
+      </a>
+      <a href="https://github.com/hideo-t/child-growth-tracker-0213-hj0" target="_blank" rel="noopener" class="repo-link" title="ソースコード">📂</a>
+    </div>
+    <div class="card-wrap">
+      <a href="https://hideo-t.github.io/family-milestone-tracker-0213-tw0/" target="_blank" rel="noopener" class="card has-pages"
+         data-name="family-milestone-tracker-0213-tw0" data-desc="" data-stars="0" data-pages="1">
+        <div class="card-icon">🌐</div>
+        <div class="card-body">
+          <div class="card-header">
+            <h3 class="card-title">family-milestone-tracker-0213-tw0</h3>
+            <span class="live-dot" title="公開中">● LIVE</span>
+          </div>
+          
+          <div class="card-footer">
+            <div class="badges"><span class="badge lang">HTML</span></div>
+            <span class="updated">2026/02/12</span>
+          </div>
+        </div>
+        <div class="card-arrow">→</div>
+      </a>
+      <a href="https://github.com/hideo-t/family-milestone-tracker-0213-tw0" target="_blank" rel="noopener" class="repo-link" title="ソースコード">📂</a>
+    </div>
+    <div class="card-wrap">
+      <a href="https://hideo-t.github.io/family-tracker-app-0213-htj/" target="_blank" rel="noopener" class="card has-pages"
+         data-name="family-tracker-app-0213-htj" data-desc="" data-stars="0" data-pages="1">
+        <div class="card-icon">🌐</div>
+        <div class="card-body">
+          <div class="card-header">
+            <h3 class="card-title">family-tracker-app-0213-htj</h3>
+            <span class="live-dot" title="公開中">● LIVE</span>
+          </div>
+          
+          <div class="card-footer">
+            <div class="badges"><span class="badge lang">HTML</span></div>
+            <span class="updated">2026/02/12</span>
+          </div>
+        </div>
+        <div class="card-arrow">→</div>
+      </a>
+      <a href="https://github.com/hideo-t/family-tracker-app-0213-htj" target="_blank" rel="noopener" class="repo-link" title="ソースコード">📂</a>
+    </div>
+    <div class="card-wrap">
+      <a href="https://hideo-t.github.io/tamiko-komago-0213-2wd/" target="_blank" rel="noopener" class="card has-pages"
+         data-name="tamiko-komago-0213-2wd" data-desc="" data-stars="0" data-pages="1">
+        <div class="card-icon">🌐</div>
+        <div class="card-body">
+          <div class="card-header">
+            <h3 class="card-title">tamiko-komago-0213-2wd</h3>
+            <span class="live-dot" title="公開中">● LIVE</span>
+          </div>
+          
+          <div class="card-footer">
+            <div class="badges"><span class="badge lang">HTML</span></div>
+            <span class="updated">2026/02/12</span>
+          </div>
+        </div>
+        <div class="card-arrow">→</div>
+      </a>
+      <a href="https://github.com/hideo-t/tamiko-komago-0213-2wd" target="_blank" rel="noopener" class="repo-link" title="ソースコード">📂</a>
+    </div>
+    <div class="card-wrap">
+      <a href="https://hideo-t.github.io/tamiko-family-tracker-0213-3tl/" target="_blank" rel="noopener" class="card has-pages"
+         data-name="tamiko-family-tracker-0213-3tl" data-desc="" data-stars="0" data-pages="1">
+        <div class="card-icon">🌐</div>
+        <div class="card-body">
+          <div class="card-header">
+            <h3 class="card-title">tamiko-family-tracker-0213-3tl</h3>
+            <span class="live-dot" title="公開中">● LIVE</span>
+          </div>
+          
+          <div class="card-footer">
+            <div class="badges"><span class="badge lang">HTML</span></div>
+            <span class="updated">2026/02/12</span>
+          </div>
+        </div>
+        <div class="card-arrow">→</div>
+      </a>
+      <a href="https://github.com/hideo-t/tamiko-family-tracker-0213-3tl" target="_blank" rel="noopener" class="repo-link" title="ソースコード">📂</a>
+    </div>
+    <div class="card-wrap">
+      <a href="https://hideo-t.github.io/tamiko-komago-0213-ayd/" target="_blank" rel="noopener" class="card has-pages"
+         data-name="tamiko-komago-0213-ayd" data-desc="" data-stars="0" data-pages="1">
+        <div class="card-icon">🌐</div>
+        <div class="card-body">
+          <div class="card-header">
+            <h3 class="card-title">tamiko-komago-0213-ayd</h3>
+            <span class="live-dot" title="公開中">● LIVE</span>
+          </div>
+          
+          <div class="card-footer">
+            <div class="badges"><span class="badge lang">HTML</span></div>
+            <span class="updated">2026/02/12</span>
+          </div>
+        </div>
+        <div class="card-arrow">→</div>
+      </a>
+      <a href="https://github.com/hideo-t/tamiko-komago-0213-ayd" target="_blank" rel="noopener" class="repo-link" title="ソースコード">📂</a>
+    </div>
+    <div class="card-wrap">
+      <a href="https://hideo-t.github.io/love-letter-to-yumi-0213-ffs/" target="_blank" rel="noopener" class="card has-pages"
+         data-name="love-letter-to-yumi-0213-ffs" data-desc="" data-stars="0" data-pages="1">
+        <div class="card-icon">🌐</div>
+        <div class="card-body">
+          <div class="card-header">
+            <h3 class="card-title">love-letter-to-yumi-0213-ffs</h3>
+            <span class="live-dot" title="公開中">● LIVE</span>
+          </div>
+          
+          <div class="card-footer">
+            <div class="badges"><span class="badge lang">HTML</span></div>
+            <span class="updated">2026/02/12</span>
+          </div>
+        </div>
+        <div class="card-arrow">→</div>
+      </a>
+      <a href="https://github.com/hideo-t/love-letter-to-yumi-0213-ffs" target="_blank" rel="noopener" class="repo-link" title="ソースコード">📂</a>
+    </div>
+    <div class="card-wrap">
+      <a href="https://hideo-t.github.io/love-letter-to-yumi-0213-ddr/" target="_blank" rel="noopener" class="card has-pages"
+         data-name="love-letter-to-yumi-0213-ddr" data-desc="" data-stars="0" data-pages="1">
+        <div class="card-icon">🌐</div>
+        <div class="card-body">
+          <div class="card-header">
+            <h3 class="card-title">love-letter-to-yumi-0213-ddr</h3>
+            <span class="live-dot" title="公開中">● LIVE</span>
+          </div>
+          
+          <div class="card-footer">
+            <div class="badges"><span class="badge lang">HTML</span></div>
+            <span class="updated">2026/02/12</span>
+          </div>
+        </div>
+        <div class="card-arrow">→</div>
+      </a>
+      <a href="https://github.com/hideo-t/love-letter-to-yumi-0213-ddr" target="_blank" rel="noopener" class="repo-link" title="ソースコード">📂</a>
+    </div>
+    <div class="card-wrap">
+      <a href="https://hideo-t.github.io/love-story-for-yumi-0213-k0q/" target="_blank" rel="noopener" class="card has-pages"
+         data-name="love-story-for-yumi-0213-k0q" data-desc="" data-stars="0" data-pages="1">
+        <div class="card-icon">🌐</div>
+        <div class="card-body">
+          <div class="card-header">
+            <h3 class="card-title">love-story-for-yumi-0213-k0q</h3>
+            <span class="live-dot" title="公開中">● LIVE</span>
+          </div>
+          
+          <div class="card-footer">
+            <div class="badges"><span class="badge lang">HTML</span></div>
+            <span class="updated">2026/02/12</span>
+          </div>
+        </div>
+        <div class="card-arrow">→</div>
+      </a>
+      <a href="https://github.com/hideo-t/love-story-for-yumi-0213-k0q" target="_blank" rel="noopener" class="repo-link" title="ソースコード">📂</a>
+    </div>
+    <div class="card-wrap">
+      <a href="https://hideo-t.github.io/love-letter-to-yumi-2026-0213-q1t/" target="_blank" rel="noopener" class="card has-pages"
+         data-name="love-letter-to-yumi-2026-0213-q1t" data-desc="" data-stars="0" data-pages="1">
+        <div class="card-icon">🌐</div>
+        <div class="card-body">
+          <div class="card-header">
+            <h3 class="card-title">love-letter-to-yumi-2026-0213-q1t</h3>
+            <span class="live-dot" title="公開中">● LIVE</span>
+          </div>
+          
+          <div class="card-footer">
+            <div class="badges"><span class="badge lang">HTML</span></div>
+            <span class="updated">2026/02/12</span>
+          </div>
+        </div>
+        <div class="card-arrow">→</div>
+      </a>
+      <a href="https://github.com/hideo-t/love-letter-to-yumi-2026-0213-q1t" target="_blank" rel="noopener" class="repo-link" title="ソースコード">📂</a>
+    </div>
+    <div class="card-wrap">
+      <a href="https://hideo-t.github.io/ai-suru-yumi-e-0213-t66/" target="_blank" rel="noopener" class="card has-pages"
+         data-name="ai-suru-yumi-e-0213-t66" data-desc="" data-stars="0" data-pages="1">
+        <div class="card-icon">🌐</div>
+        <div class="card-body">
+          <div class="card-header">
+            <h3 class="card-title">ai-suru-yumi-e-0213-t66</h3>
+            <span class="live-dot" title="公開中">● LIVE</span>
+          </div>
+          
+          <div class="card-footer">
+            <div class="badges"><span class="badge lang">HTML</span></div>
+            <span class="updated">2026/02/12</span>
+          </div>
+        </div>
+        <div class="card-arrow">→</div>
+      </a>
+      <a href="https://github.com/hideo-t/ai-suru-yumi-e-0213-t66" target="_blank" rel="noopener" class="repo-link" title="ソースコード">📂</a>
+    </div>
+    <div class="card-wrap">
+      <a href="https://hideo-t.github.io/love-letter-to-yumi-0213-5mt/" target="_blank" rel="noopener" class="card has-pages"
+         data-name="love-letter-to-yumi-0213-5mt" data-desc="" data-stars="0" data-pages="1">
+        <div class="card-icon">🌐</div>
+        <div class="card-body">
+          <div class="card-header">
+            <h3 class="card-title">love-letter-to-yumi-0213-5mt</h3>
+            <span class="live-dot" title="公開中">● LIVE</span>
+          </div>
+          
+          <div class="card-footer">
+            <div class="badges"><span class="badge lang">HTML</span></div>
+            <span class="updated">2026/02/12</span>
+          </div>
+        </div>
+        <div class="card-arrow">→</div>
+      </a>
+      <a href="https://github.com/hideo-t/love-letter-to-yumi-0213-5mt" target="_blank" rel="noopener" class="repo-link" title="ソースコード">📂</a>
+    </div>
+    <div class="card-wrap">
+      <a href="https://hideo-t.github.io/dear-yumi-birthday-2026/" target="_blank" rel="noopener" class="card has-pages"
+         data-name="dear-yumi-birthday-2026" data-desc="auto-generated: dear-yumi-birthday-2026" data-stars="0" data-pages="1">
+        <div class="card-icon">🌐</div>
+        <div class="card-body">
+          <div class="card-header">
+            <h3 class="card-title">dear-yumi-birthday-2026</h3>
+            <span class="live-dot" title="公開中">● LIVE</span>
+          </div>
+          <p class="card-desc">Auto-generated: dear-yumi-birthday-2026</p>
+          <div class="card-footer">
+            <div class="badges"><span class="badge lang">HTML</span></div>
+            <span class="updated">2026/02/12</span>
+          </div>
+        </div>
+        <div class="card-arrow">→</div>
+      </a>
+      <a href="https://github.com/hideo-t/dear-yumi-birthday-2026" target="_blank" rel="noopener" class="repo-link" title="ソースコード">📂</a>
+    </div>
+    <div class="card-wrap">
+      <a href="https://hideo-t.github.io/love-letter-to-yumi/" target="_blank" rel="noopener" class="card has-pages"
+         data-name="love-letter-to-yumi" data-desc="auto-generated: love-letter-to-yumi" data-stars="0" data-pages="1">
+        <div class="card-icon">🌐</div>
+        <div class="card-body">
+          <div class="card-header">
+            <h3 class="card-title">love-letter-to-yumi</h3>
+            <span class="live-dot" title="公開中">● LIVE</span>
+          </div>
+          <p class="card-desc">Auto-generated: love-letter-to-yumi</p>
+          <div class="card-footer">
+            <div class="badges"><span class="badge lang">HTML</span></div>
+            <span class="updated">2026/02/12</span>
+          </div>
+        </div>
+        <div class="card-arrow">→</div>
+      </a>
+      <a href="https://github.com/hideo-t/love-letter-to-yumi" target="_blank" rel="noopener" class="repo-link" title="ソースコード">📂</a>
+    </div>
+    <div class="card-wrap">
+      <a href="https://hideo-t.github.io/love-story-for-yumi/" target="_blank" rel="noopener" class="card has-pages"
+         data-name="love-story-for-yumi" data-desc="auto-generated: love-story-for-yumi" data-stars="0" data-pages="1">
+        <div class="card-icon">🌐</div>
+        <div class="card-body">
+          <div class="card-header">
+            <h3 class="card-title">love-story-for-yumi</h3>
+            <span class="live-dot" title="公開中">● LIVE</span>
+          </div>
+          <p class="card-desc">Auto-generated: love-story-for-yumi</p>
+          <div class="card-footer">
+            <div class="badges"><span class="badge lang">HTML</span></div>
+            <span class="updated">2026/02/12</span>
+          </div>
+        </div>
+        <div class="card-arrow">→</div>
+      </a>
+      <a href="https://github.com/hideo-t/love-story-for-yumi" target="_blank" rel="noopener" class="repo-link" title="ソースコード">📂</a>
+    </div>
+    <div class="card-wrap">
+      <a href="https://hideo-t.github.io/beloved-yumi-birthday-2026/" target="_blank" rel="noopener" class="card has-pages"
+         data-name="beloved-yumi-birthday-2026" data-desc="auto-generated: beloved-yumi-birthday-2026" data-stars="0" data-pages="1">
+        <div class="card-icon">🌐</div>
+        <div class="card-body">
+          <div class="card-header">
+            <h3 class="card-title">beloved-yumi-birthday-2026</h3>
+            <span class="live-dot" title="公開中">● LIVE</span>
+          </div>
+          <p class="card-desc">Auto-generated: beloved-yumi-birthday-2026</p>
+          <div class="card-footer">
+            <div class="badges"><span class="badge lang">HTML</span></div>
+            <span class="updated">2026/02/12</span>
+          </div>
+        </div>
+        <div class="card-arrow">→</div>
+      </a>
+      <a href="https://github.com/hideo-t/beloved-yumi-birthday-2026" target="_blank" rel="noopener" class="repo-link" title="ソースコード">📂</a>
+    </div>
+    <div class="card-wrap">
+      <a href="https://hideo-t.github.io/your-kingdom-level/" target="_blank" rel="noopener" class="card has-pages"
+         data-name="your-kingdom-level" data-desc="auto-generated: your-kingdom-level" data-stars="0" data-pages="1">
+        <div class="card-icon">🌐</div>
+        <div class="card-body">
+          <div class="card-header">
+            <h3 class="card-title">your-kingdom-level</h3>
+            <span class="live-dot" title="公開中">● LIVE</span>
+          </div>
+          <p class="card-desc">Auto-generated: your-kingdom-level</p>
+          <div class="card-footer">
+            <div class="badges"><span class="badge lang">HTML</span></div>
+            <span class="updated">2026/02/12</span>
+          </div>
+        </div>
+        <div class="card-arrow">→</div>
+      </a>
+      <a href="https://github.com/hideo-t/your-kingdom-level" target="_blank" rel="noopener" class="repo-link" title="ソースコード">📂</a>
+    </div>
+    <div class="card-wrap">
+      <a href="https://hideo-t.github.io/protagonist-percentage-checker/" target="_blank" rel="noopener" class="card has-pages"
+         data-name="protagonist-percentage-checker" data-desc="auto-generated: protagonist-percentage-checker" data-stars="0" data-pages="1">
+        <div class="card-icon">🌐</div>
+        <div class="card-body">
+          <div class="card-header">
+            <h3 class="card-title">protagonist-percentage-checker</h3>
+            <span class="live-dot" title="公開中">● LIVE</span>
+          </div>
+          <p class="card-desc">Auto-generated: protagonist-percentage-checker</p>
+          <div class="card-footer">
+            <div class="badges"><span class="badge lang">HTML</span></div>
+            <span class="updated">2026/02/12</span>
+          </div>
+        </div>
+        <div class="card-arrow">→</div>
+      </a>
+      <a href="https://github.com/hideo-t/protagonist-percentage-checker" target="_blank" rel="noopener" class="repo-link" title="ソースコード">📂</a>
+    </div>
+    <div class="card-wrap">
+      <a href="https://hideo-t.github.io/tekito-match/" target="_blank" rel="noopener" class="card has-pages"
+         data-name="tekito-match" data-desc="auto-generated: tekito-match" data-stars="0" data-pages="1">
+        <div class="card-icon">🌐</div>
+        <div class="card-body">
+          <div class="card-header">
+            <h3 class="card-title">tekito-match</h3>
+            <span class="live-dot" title="公開中">● LIVE</span>
+          </div>
+          <p class="card-desc">Auto-generated: tekito-match</p>
+          <div class="card-footer">
+            <div class="badges"><span class="badge lang">HTML</span></div>
+            <span class="updated">2026/02/12</span>
+          </div>
+        </div>
+        <div class="card-arrow">→</div>
+      </a>
+      <a href="https://github.com/hideo-t/tekito-match" target="_blank" rel="noopener" class="repo-link" title="ソースコード">📂</a>
+    </div>
+    <div class="card-wrap">
+      <a href="https://hideo-t.github.io/fake-dating-chat-v2/" target="_blank" rel="noopener" class="card has-pages"
+         data-name="fake-dating-chat-v2" data-desc="auto-generated: fake-dating-chat-v2" data-stars="0" data-pages="1">
+        <div class="card-icon">🌐</div>
+        <div class="card-body">
+          <div class="card-header">
+            <h3 class="card-title">fake-dating-chat-v2</h3>
+            <span class="live-dot" title="公開中">● LIVE</span>
+          </div>
+          <p class="card-desc">Auto-generated: fake-dating-chat-v2</p>
+          <div class="card-footer">
+            <div class="badges"><span class="badge lang">HTML</span></div>
+            <span class="updated">2026/02/12</span>
+          </div>
+        </div>
+        <div class="card-arrow">→</div>
+      </a>
+      <a href="https://github.com/hideo-t/fake-dating-chat-v2" target="_blank" rel="noopener" class="repo-link" title="ソースコード">📂</a>
+    </div>
+    <div class="card-wrap">
+      <a href="https://hideo-t.github.io/tekitou-match/" target="_blank" rel="noopener" class="card has-pages"
+         data-name="tekitou-match" data-desc="auto-generated: tekitou-match" data-stars="0" data-pages="1">
+        <div class="card-icon">🌐</div>
+        <div class="card-body">
+          <div class="card-header">
+            <h3 class="card-title">tekitou-match</h3>
+            <span class="live-dot" title="公開中">● LIVE</span>
+          </div>
+          <p class="card-desc">Auto-generated: tekitou-match</p>
+          <div class="card-footer">
+            <div class="badges"><span class="badge lang">HTML</span></div>
+            <span class="updated">2026/02/12</span>
+          </div>
+        </div>
+        <div class="card-arrow">→</div>
+      </a>
+      <a href="https://github.com/hideo-t/tekitou-match" target="_blank" rel="noopener" class="repo-link" title="ソースコード">📂</a>
+    </div>
+    <div class="card-wrap">
+      <a href="https://hideo-t.github.io/nanchatte-line-ai-dating/" target="_blank" rel="noopener" class="card has-pages"
+         data-name="nanchatte-line-ai-dating" data-desc="auto-generated: nanchatte-line-ai-dating" data-stars="0" data-pages="1">
+        <div class="card-icon">🌐</div>
+        <div class="card-body">
+          <div class="card-header">
+            <h3 class="card-title">nanchatte-line-ai-dating</h3>
+            <span class="live-dot" title="公開中">● LIVE</span>
+          </div>
+          <p class="card-desc">Auto-generated: nanchatte-line-ai-dating</p>
+          <div class="card-footer">
+            <div class="badges"><span class="badge lang">HTML</span></div>
+            <span class="updated">2026/02/12</span>
+          </div>
+        </div>
+        <div class="card-arrow">→</div>
+      </a>
+      <a href="https://github.com/hideo-t/nanchatte-line-ai-dating" target="_blank" rel="noopener" class="repo-link" title="ソースコード">📂</a>
+    </div>
+    <div class="card-wrap">
+      <a href="https://hideo-t.github.io/nanchatte-gram/" target="_blank" rel="noopener" class="card has-pages"
+         data-name="nanchatte-gram" data-desc="auto-generated: nanchatte-gram" data-stars="0" data-pages="1">
+        <div class="card-icon">🌐</div>
+        <div class="card-body">
+          <div class="card-header">
+            <h3 class="card-title">nanchatte-gram</h3>
+            <span class="live-dot" title="公開中">● LIVE</span>
+          </div>
+          <p class="card-desc">Auto-generated: nanchatte-gram</p>
+          <div class="card-footer">
+            <div class="badges"><span class="badge lang">HTML</span></div>
+            <span class="updated">2026/02/12</span>
+          </div>
+        </div>
+        <div class="card-arrow">→</div>
+      </a>
+      <a href="https://github.com/hideo-t/nanchatte-gram" target="_blank" rel="noopener" class="repo-link" title="ソースコード">📂</a>
+    </div>
+    <div class="card-wrap">
+      <a href="https://hideo-t.github.io/world-king-app-3/" target="_blank" rel="noopener" class="card has-pages"
+         data-name="world-king-app-3" data-desc="auto-generated: world-king-app-3" data-stars="0" data-pages="1">
+        <div class="card-icon">🌐</div>
+        <div class="card-body">
+          <div class="card-header">
+            <h3 class="card-title">world-king-app-3</h3>
+            <span class="live-dot" title="公開中">● LIVE</span>
+          </div>
+          <p class="card-desc">Auto-generated: world-king-app-3</p>
+          <div class="card-footer">
+            <div class="badges"><span class="badge lang">HTML</span></div>
+            <span class="updated">2026/02/12</span>
+          </div>
+        </div>
+        <div class="card-arrow">→</div>
+      </a>
+      <a href="https://github.com/hideo-t/world-king-app-3" target="_blank" rel="noopener" class="repo-link" title="ソースコード">📂</a>
+    </div>
+    <div class="card-wrap">
+      <a href="https://hideo-t.github.io/world-king-app-2/" target="_blank" rel="noopener" class="card has-pages"
+         data-name="world-king-app-2" data-desc="auto-generated: world-king-app-2" data-stars="0" data-pages="1">
+        <div class="card-icon">🌐</div>
+        <div class="card-body">
+          <div class="card-header">
+            <h3 class="card-title">world-king-app-2</h3>
+            <span class="live-dot" title="公開中">● LIVE</span>
+          </div>
+          <p class="card-desc">Auto-generated: world-king-app-2</p>
+          <div class="card-footer">
+            <div class="badges"><span class="badge lang">HTML</span></div>
+            <span class="updated">2026/02/12</span>
+          </div>
+        </div>
+        <div class="card-arrow">→</div>
+      </a>
+      <a href="https://github.com/hideo-t/world-king-app-2" target="_blank" rel="noopener" class="repo-link" title="ソースコード">📂</a>
+    </div>
+    <div class="card-wrap">
+      <a href="https://hideo-t.github.io/world-king-app/" target="_blank" rel="noopener" class="card has-pages"
+         data-name="world-king-app" data-desc="auto-generated: world-king-app" data-stars="0" data-pages="1">
+        <div class="card-icon">🌐</div>
+        <div class="card-body">
+          <div class="card-header">
+            <h3 class="card-title">world-king-app</h3>
+            <span class="live-dot" title="公開中">● LIVE</span>
+          </div>
+          <p class="card-desc">Auto-generated: world-king-app</p>
+          <div class="card-footer">
+            <div class="badges"><span class="badge lang">HTML</span></div>
+            <span class="updated">2026/02/12</span>
+          </div>
+        </div>
+        <div class="card-arrow">→</div>
+      </a>
+      <a href="https://github.com/hideo-t/world-king-app" target="_blank" rel="noopener" class="repo-link" title="ソースコード">📂</a>
+    </div>
+    <div class="card-wrap">
+      <a href="https://hideo-t.github.io/moonlight-spirit-diagnosis/" target="_blank" rel="noopener" class="card has-pages"
+         data-name="moonlight-spirit-diagnosis" data-desc="auto-generated: moonlight-spirit-diagnosis" data-stars="0" data-pages="1">
+        <div class="card-icon">🌐</div>
+        <div class="card-body">
+          <div class="card-header">
+            <h3 class="card-title">moonlight-spirit-diagnosis</h3>
+            <span class="live-dot" title="公開中">● LIVE</span>
+          </div>
+          <p class="card-desc">Auto-generated: moonlight-spirit-diagnosis</p>
+          <div class="card-footer">
+            <div class="badges"><span class="badge lang">HTML</span></div>
+            <span class="updated">2026/02/12</span>
+          </div>
+        </div>
+        <div class="card-arrow">→</div>
+      </a>
+      <a href="https://github.com/hideo-t/moonlight-spirit-diagnosis" target="_blank" rel="noopener" class="repo-link" title="ソースコード">📂</a>
+    </div>
+    <div class="card-wrap">
+      <a href="https://hideo-t.github.io/todays-omikuji/" target="_blank" rel="noopener" class="card has-pages"
+         data-name="todays-omikuji" data-desc="auto-generated: todays-omikuji" data-stars="0" data-pages="1">
+        <div class="card-icon">🌐</div>
+        <div class="card-body">
+          <div class="card-header">
+            <h3 class="card-title">todays-omikuji</h3>
+            <span class="live-dot" title="公開中">● LIVE</span>
+          </div>
+          <p class="card-desc">Auto-generated: todays-omikuji</p>
+          <div class="card-footer">
+            <div class="badges"><span class="badge lang">HTML</span></div>
+            <span class="updated">2026/02/12</span>
+          </div>
+        </div>
+        <div class="card-arrow">→</div>
+      </a>
+      <a href="https://github.com/hideo-t/todays-omikuji" target="_blank" rel="noopener" class="repo-link" title="ソースコード">📂</a>
+    </div>
+    <div class="card-wrap">
+      <a href="https://hideo-t.github.io/pet/" target="_blank" rel="noopener" class="card has-pages"
+         data-name="pet" data-desc="" data-stars="0" data-pages="1">
+        <div class="card-icon">🌐</div>
+        <div class="card-body">
+          <div class="card-header">
+            <h3 class="card-title">pet</h3>
+            <span class="live-dot" title="公開中">● LIVE</span>
+          </div>
+          
+          <div class="card-footer">
+            <div class="badges"><span class="badge lang">HTML</span></div>
+            <span class="updated">2026/02/12</span>
+          </div>
+        </div>
+        <div class="card-arrow">→</div>
+      </a>
+      <a href="https://github.com/hideo-t/pet" target="_blank" rel="noopener" class="repo-link" title="ソースコード">📂</a>
+    </div>
+    <div class="card-wrap">
+      <a href="https://hideo-t.github.io/giri2/" target="_blank" rel="noopener" class="card has-pages"
+         data-name="giri2" data-desc="" data-stars="0" data-pages="1">
+        <div class="card-icon">🌐</div>
+        <div class="card-body">
+          <div class="card-header">
+            <h3 class="card-title">giri2</h3>
+            <span class="live-dot" title="公開中">● LIVE</span>
+          </div>
+          
+          <div class="card-footer">
+            <div class="badges"><span class="badge lang">HTML</span></div>
+            <span class="updated">2026/02/11</span>
+          </div>
+        </div>
+        <div class="card-arrow">→</div>
+      </a>
+      <a href="https://github.com/hideo-t/giri2" target="_blank" rel="noopener" class="repo-link" title="ソースコード">📂</a>
+    </div>
+    <div class="card-wrap">
+      <a href="https://hideo-t.github.io/giri_giri/" target="_blank" rel="noopener" class="card has-pages"
+         data-name="giri_giri" data-desc="" data-stars="0" data-pages="1">
+        <div class="card-icon">🌐</div>
+        <div class="card-body">
+          <div class="card-header">
+            <h3 class="card-title">giri_giri</h3>
+            <span class="live-dot" title="公開中">● LIVE</span>
+          </div>
+          
+          <div class="card-footer">
+            <div class="badges"><span class="badge lang">HTML</span></div>
+            <span class="updated">2026/02/11</span>
+          </div>
+        </div>
+        <div class="card-arrow">→</div>
+      </a>
+      <a href="https://github.com/hideo-t/giri_giri" target="_blank" rel="noopener" class="repo-link" title="ソースコード">📂</a>
+    </div>
+    <div class="card-wrap">
+      <a href="https://hideo-t.github.io/izakaya/" target="_blank" rel="noopener" class="card has-pages"
+         data-name="izakaya" data-desc="" data-stars="0" data-pages="1">
+        <div class="card-icon">🌐</div>
+        <div class="card-body">
+          <div class="card-header">
+            <h3 class="card-title">izakaya</h3>
+            <span class="live-dot" title="公開中">● LIVE</span>
+          </div>
+          
+          <div class="card-footer">
+            <div class="badges"><span class="badge lang">HTML</span></div>
+            <span class="updated">2026/02/11</span>
+          </div>
+        </div>
+        <div class="card-arrow">→</div>
+      </a>
+      <a href="https://github.com/hideo-t/izakaya" target="_blank" rel="noopener" class="repo-link" title="ソースコード">📂</a>
+    </div>
+    <div class="card-wrap">
+      <a href="https://hideo-t.github.io/NekoLogy/" target="_blank" rel="noopener" class="card has-pages"
+         data-name="nekology" data-desc="" data-stars="0" data-pages="1">
+        <div class="card-icon">🌐</div>
+        <div class="card-body">
+          <div class="card-header">
+            <h3 class="card-title">NekoLogy</h3>
+            <span class="live-dot" title="公開中">● LIVE</span>
+          </div>
+          
+          <div class="card-footer">
+            <div class="badges"><span class="badge lang">HTML</span></div>
+            <span class="updated">2026/02/11</span>
+          </div>
+        </div>
+        <div class="card-arrow">→</div>
+      </a>
+      <a href="https://github.com/hideo-t/NekoLogy" target="_blank" rel="noopener" class="repo-link" title="ソースコード">📂</a>
+    </div>
+    <div class="card-wrap">
+      <a href="https://hideo-t.github.io/library_of_souls/" target="_blank" rel="noopener" class="card has-pages"
+         data-name="library_of_souls" data-desc="" data-stars="0" data-pages="1">
+        <div class="card-icon">🌐</div>
+        <div class="card-body">
+          <div class="card-header">
+            <h3 class="card-title">library_of_souls</h3>
+            <span class="live-dot" title="公開中">● LIVE</span>
+          </div>
+          
+          <div class="card-footer">
+            <div class="badges"><span class="badge lang">HTML</span></div>
+            <span class="updated">2026/02/11</span>
+          </div>
+        </div>
+        <div class="card-arrow">→</div>
+      </a>
+      <a href="https://github.com/hideo-t/library_of_souls" target="_blank" rel="noopener" class="repo-link" title="ソースコード">📂</a>
+    </div>
+    <div class="card-wrap">
+      <a href="https://hideo-t.github.io/bin_scan/" target="_blank" rel="noopener" class="card has-pages"
+         data-name="bin_scan" data-desc="" data-stars="0" data-pages="1">
+        <div class="card-icon">🌐</div>
+        <div class="card-body">
+          <div class="card-header">
+            <h3 class="card-title">bin_scan</h3>
+            <span class="live-dot" title="公開中">● LIVE</span>
+          </div>
+          
+          <div class="card-footer">
+            <div class="badges"><span class="badge lang">HTML</span></div>
+            <span class="updated">2026/02/10</span>
+          </div>
+        </div>
+        <div class="card-arrow">→</div>
+      </a>
+      <a href="https://github.com/hideo-t/bin_scan" target="_blank" rel="noopener" class="repo-link" title="ソースコード">📂</a>
+    </div>
+    <div class="card-wrap">
+      <a href="https://hideo-t.github.io/time/" target="_blank" rel="noopener" class="card has-pages"
+         data-name="time" data-desc="" data-stars="0" data-pages="1">
+        <div class="card-icon">🌐</div>
+        <div class="card-body">
+          <div class="card-header">
+            <h3 class="card-title">time</h3>
+            <span class="live-dot" title="公開中">● LIVE</span>
+          </div>
+          
+          <div class="card-footer">
+            <div class="badges"><span class="badge lang">HTML</span></div>
+            <span class="updated">2026/02/10</span>
+          </div>
+        </div>
+        <div class="card-arrow">→</div>
+      </a>
+      <a href="https://github.com/hideo-t/time" target="_blank" rel="noopener" class="repo-link" title="ソースコード">📂</a>
+    </div>
+    <div class="card-wrap">
+      <a href="https://hideo-t.github.io/hikagen/" target="_blank" rel="noopener" class="card has-pages"
+         data-name="hikagen" data-desc="" data-stars="0" data-pages="1">
+        <div class="card-icon">🌐</div>
+        <div class="card-body">
+          <div class="card-header">
+            <h3 class="card-title">hikagen</h3>
+            <span class="live-dot" title="公開中">● LIVE</span>
+          </div>
+          
+          <div class="card-footer">
+            <div class="badges"><span class="badge lang">HTML</span></div>
+            <span class="updated">2026/02/10</span>
+          </div>
+        </div>
+        <div class="card-arrow">→</div>
+      </a>
+      <a href="https://github.com/hideo-t/hikagen" target="_blank" rel="noopener" class="repo-link" title="ソースコード">📂</a>
+    </div>
+    <div class="card-wrap">
+      <a href="https://hideo-t.github.io/JUDGEX/" target="_blank" rel="noopener" class="card has-pages"
+         data-name="judgex" data-desc="" data-stars="0" data-pages="1">
+        <div class="card-icon">⚡</div>
+        <div class="card-body">
+          <div class="card-header">
+            <h3 class="card-title">JUDGEX</h3>
+            <span class="live-dot" title="公開中">● LIVE</span>
+          </div>
+          
+          <div class="card-footer">
+            <div class="badges"><span class="badge lang">JavaScript</span></div>
+            <span class="updated">2026/02/09</span>
+          </div>
+        </div>
+        <div class="card-arrow">→</div>
+      </a>
+      <a href="https://github.com/hideo-t/JUDGEX" target="_blank" rel="noopener" class="repo-link" title="ソースコード">📂</a>
+    </div>
+    <div class="card-wrap">
+      <a href="https://github.com/hideo-t/wkjp" target="_blank" rel="noopener" class="card"
+         data-name="wkjp" data-desc="" data-stars="0" data-pages="0">
+        <div class="card-icon">📦</div>
+        <div class="card-body">
+          <div class="card-header">
+            <h3 class="card-title">wkjp</h3>
+          </div>
+          
+          <div class="card-footer">
+            <div class="badges"></div>
+            <span class="updated">2026/02/06</span>
+          </div>
+        </div>
+        <div class="card-arrow">→</div>
+      </a>
+    </div>
+    <div class="card-wrap">
+      <a href="https://hideo-t.github.io/drive/" target="_blank" rel="noopener" class="card has-pages"
+         data-name="drive" data-desc="" data-stars="0" data-pages="1">
+        <div class="card-icon">🌐</div>
+        <div class="card-body">
+          <div class="card-header">
+            <h3 class="card-title">drive</h3>
+            <span class="live-dot" title="公開中">● LIVE</span>
+          </div>
+          
+          <div class="card-footer">
+            <div class="badges"><span class="badge lang">HTML</span></div>
+            <span class="updated">2026/02/06</span>
+          </div>
+        </div>
+        <div class="card-arrow">→</div>
+      </a>
+      <a href="https://github.com/hideo-t/drive" target="_blank" rel="noopener" class="repo-link" title="ソースコード">📂</a>
+    </div>
+    <div class="card-wrap">
+      <a href="https://hideo-t.github.io/pzl/" target="_blank" rel="noopener" class="card has-pages"
+         data-name="pzl" data-desc="" data-stars="0" data-pages="1">
+        <div class="card-icon">🌐</div>
+        <div class="card-body">
+          <div class="card-header">
+            <h3 class="card-title">pzl</h3>
+            <span class="live-dot" title="公開中">● LIVE</span>
+          </div>
+          
+          <div class="card-footer">
+            <div class="badges"><span class="badge lang">HTML</span></div>
+            <span class="updated">2026/02/06</span>
+          </div>
+        </div>
+        <div class="card-arrow">→</div>
+      </a>
+      <a href="https://github.com/hideo-t/pzl" target="_blank" rel="noopener" class="repo-link" title="ソースコード">📂</a>
+    </div>
+    <div class="card-wrap">
+      <a href="https://hideo-t.github.io/onigiri/" target="_blank" rel="noopener" class="card has-pages"
+         data-name="onigiri" data-desc="" data-stars="0" data-pages="1">
+        <div class="card-icon">🌐</div>
+        <div class="card-body">
+          <div class="card-header">
+            <h3 class="card-title">onigiri</h3>
+            <span class="live-dot" title="公開中">● LIVE</span>
+          </div>
+          
+          <div class="card-footer">
+            <div class="badges"><span class="badge lang">HTML</span></div>
+            <span class="updated">2026/02/06</span>
+          </div>
+        </div>
+        <div class="card-arrow">→</div>
+      </a>
+      <a href="https://github.com/hideo-t/onigiri" target="_blank" rel="noopener" class="repo-link" title="ソースコード">📂</a>
+    </div>
+    <div class="card-wrap">
+      <a href="https://hideo-t.github.io/bosstelu/" target="_blank" rel="noopener" class="card has-pages"
+         data-name="bosstelu" data-desc="" data-stars="0" data-pages="1">
+        <div class="card-icon">🌐</div>
+        <div class="card-body">
+          <div class="card-header">
+            <h3 class="card-title">bosstelu</h3>
+            <span class="live-dot" title="公開中">● LIVE</span>
+          </div>
+          
+          <div class="card-footer">
+            <div class="badges"><span class="badge lang">HTML</span></div>
+            <span class="updated">2026/02/06</span>
+          </div>
+        </div>
+        <div class="card-arrow">→</div>
+      </a>
+      <a href="https://github.com/hideo-t/bosstelu" target="_blank" rel="noopener" class="repo-link" title="ソースコード">📂</a>
+    </div>
+    <div class="card-wrap">
+      <a href="https://hideo-t.github.io/inv_type/" target="_blank" rel="noopener" class="card has-pages"
+         data-name="inv_type" data-desc="" data-stars="0" data-pages="1">
+        <div class="card-icon">🌐</div>
+        <div class="card-body">
+          <div class="card-header">
+            <h3 class="card-title">inv_type</h3>
+            <span class="live-dot" title="公開中">● LIVE</span>
+          </div>
+          
+          <div class="card-footer">
+            <div class="badges"><span class="badge lang">HTML</span></div>
+            <span class="updated">2026/02/06</span>
+          </div>
+        </div>
+        <div class="card-arrow">→</div>
+      </a>
+      <a href="https://github.com/hideo-t/inv_type" target="_blank" rel="noopener" class="repo-link" title="ソースコード">📂</a>
+    </div>
+    <div class="card-wrap">
+      <a href="https://hideo-t.github.io/311memo2026/" target="_blank" rel="noopener" class="card has-pages"
+         data-name="311memo2026" data-desc="" data-stars="0" data-pages="1">
+        <div class="card-icon">🌐</div>
+        <div class="card-body">
+          <div class="card-header">
+            <h3 class="card-title">311memo2026</h3>
+            <span class="live-dot" title="公開中">● LIVE</span>
+          </div>
+          
+          <div class="card-footer">
+            <div class="badges"><span class="badge lang">HTML</span></div>
+            <span class="updated">2026/02/05</span>
+          </div>
+        </div>
+        <div class="card-arrow">→</div>
+      </a>
+      <a href="https://github.com/hideo-t/311memo2026" target="_blank" rel="noopener" class="repo-link" title="ソースコード">📂</a>
+    </div>
+    <div class="card-wrap">
+      <a href="https://hideo-t.github.io/wanko/" target="_blank" rel="noopener" class="card has-pages"
+         data-name="wanko" data-desc="" data-stars="0" data-pages="1">
+        <div class="card-icon">🌐</div>
+        <div class="card-body">
+          <div class="card-header">
+            <h3 class="card-title">wanko</h3>
+            <span class="live-dot" title="公開中">● LIVE</span>
+          </div>
+          
+          <div class="card-footer">
+            <div class="badges"><span class="badge lang">HTML</span></div>
+            <span class="updated">2026/02/03</span>
+          </div>
+        </div>
+        <div class="card-arrow">→</div>
+      </a>
+      <a href="https://github.com/hideo-t/wanko" target="_blank" rel="noopener" class="repo-link" title="ソースコード">📂</a>
+    </div>
+    <div class="card-wrap">
+      <a href="https://hideo-t.github.io/311/" target="_blank" rel="noopener" class="card has-pages"
+         data-name="311" data-desc="" data-stars="0" data-pages="1">
+        <div class="card-icon">⚡</div>
+        <div class="card-body">
+          <div class="card-header">
+            <h3 class="card-title">311</h3>
+            <span class="live-dot" title="公開中">● LIVE</span>
+          </div>
+          
+          <div class="card-footer">
+            <div class="badges"><span class="badge lang">JavaScript</span></div>
+            <span class="updated">2026/02/03</span>
+          </div>
+        </div>
+        <div class="card-arrow">→</div>
+      </a>
+      <a href="https://github.com/hideo-t/311" target="_blank" rel="noopener" class="repo-link" title="ソースコード">📂</a>
+    </div>
+    <div class="card-wrap">
+      <a href="https://hideo-t.github.io/311m2026v2/" target="_blank" rel="noopener" class="card has-pages"
+         data-name="311m2026v2" data-desc="" data-stars="0" data-pages="1">
+        <div class="card-icon">⚡</div>
+        <div class="card-body">
+          <div class="card-header">
+            <h3 class="card-title">311m2026v2</h3>
+            <span class="live-dot" title="公開中">● LIVE</span>
+          </div>
+          
+          <div class="card-footer">
+            <div class="badges"><span class="badge lang">JavaScript</span></div>
+            <span class="updated">2026/02/02</span>
+          </div>
+        </div>
+        <div class="card-arrow">→</div>
+      </a>
+      <a href="https://github.com/hideo-t/311m2026v2" target="_blank" rel="noopener" class="repo-link" title="ソースコード">📂</a>
+    </div>
+    <div class="card-wrap">
+      <a href="https://hideo-t.github.io/sound_tape_play/" target="_blank" rel="noopener" class="card has-pages"
+         data-name="sound_tape_play" data-desc="" data-stars="0" data-pages="1">
+        <div class="card-icon">🌐</div>
+        <div class="card-body">
+          <div class="card-header">
+            <h3 class="card-title">sound_tape_play</h3>
+            <span class="live-dot" title="公開中">● LIVE</span>
+          </div>
+          
+          <div class="card-footer">
+            <div class="badges"><span class="badge lang">HTML</span></div>
+            <span class="updated">2026/02/02</span>
+          </div>
+        </div>
+        <div class="card-arrow">→</div>
+      </a>
+      <a href="https://github.com/hideo-t/sound_tape_play" target="_blank" rel="noopener" class="repo-link" title="ソースコード">📂</a>
+    </div>
+    <div class="card-wrap">
+      <a href="https://hideo-t.github.io/c_deck/" target="_blank" rel="noopener" class="card has-pages"
+         data-name="c_deck" data-desc="" data-stars="0" data-pages="1">
+        <div class="card-icon">🎨</div>
+        <div class="card-body">
+          <div class="card-header">
+            <h3 class="card-title">c_deck</h3>
+            <span class="live-dot" title="公開中">● LIVE</span>
+          </div>
+          
+          <div class="card-footer">
+            <div class="badges"><span class="badge lang">CSS</span></div>
+            <span class="updated">2026/02/02</span>
+          </div>
+        </div>
+        <div class="card-arrow">→</div>
+      </a>
+      <a href="https://github.com/hideo-t/c_deck" target="_blank" rel="noopener" class="repo-link" title="ソースコード">📂</a>
+    </div>
+    <div class="card-wrap">
+      <a href="https://hideo-t.github.io/tenohiranasushi/" target="_blank" rel="noopener" class="card has-pages"
+         data-name="tenohiranasushi" data-desc="" data-stars="0" data-pages="1">
+        <div class="card-icon">🌐</div>
+        <div class="card-body">
+          <div class="card-header">
+            <h3 class="card-title">tenohiranasushi</h3>
+            <span class="live-dot" title="公開中">● LIVE</span>
+          </div>
+          
+          <div class="card-footer">
+            <div class="badges"><span class="badge lang">HTML</span></div>
+            <span class="updated">2026/01/30</span>
+          </div>
+        </div>
+        <div class="card-arrow">→</div>
+      </a>
+      <a href="https://github.com/hideo-t/tenohiranasushi" target="_blank" rel="noopener" class="repo-link" title="ソースコード">📂</a>
+    </div>
+    <div class="card-wrap">
+      <a href="https://hideo-t.github.io/tesowomen/" target="_blank" rel="noopener" class="card has-pages"
+         data-name="tesowomen" data-desc="" data-stars="0" data-pages="1">
+        <div class="card-icon">🌐</div>
+        <div class="card-body">
+          <div class="card-header">
+            <h3 class="card-title">tesowomen</h3>
+            <span class="live-dot" title="公開中">● LIVE</span>
+          </div>
+          
+          <div class="card-footer">
+            <div class="badges"><span class="badge lang">HTML</span></div>
+            <span class="updated">2026/01/30</span>
+          </div>
+        </div>
+        <div class="card-arrow">→</div>
+      </a>
+      <a href="https://github.com/hideo-t/tesowomen" target="_blank" rel="noopener" class="repo-link" title="ソースコード">📂</a>
+    </div>
+    <div class="card-wrap">
+      <a href="https://hideo-t.github.io/coingame/" target="_blank" rel="noopener" class="card has-pages"
+         data-name="coingame" data-desc="" data-stars="0" data-pages="1">
+        <div class="card-icon">🌐</div>
+        <div class="card-body">
+          <div class="card-header">
+            <h3 class="card-title">coingame</h3>
+            <span class="live-dot" title="公開中">● LIVE</span>
+          </div>
+          
+          <div class="card-footer">
+            <div class="badges"><span class="badge lang">HTML</span></div>
+            <span class="updated">2026/01/30</span>
+          </div>
+        </div>
+        <div class="card-arrow">→</div>
+      </a>
+      <a href="https://github.com/hideo-t/coingame" target="_blank" rel="noopener" class="repo-link" title="ソースコード">📂</a>
+    </div>
+    <div class="card-wrap">
+      <a href="https://hideo-t.github.io/zaiun/" target="_blank" rel="noopener" class="card has-pages"
+         data-name="zaiun" data-desc="" data-stars="0" data-pages="1">
+        <div class="card-icon">🌐</div>
+        <div class="card-body">
+          <div class="card-header">
+            <h3 class="card-title">zaiun</h3>
+            <span class="live-dot" title="公開中">● LIVE</span>
+          </div>
+          
+          <div class="card-footer">
+            <div class="badges"><span class="badge lang">HTML</span></div>
+            <span class="updated">2026/01/29</span>
+          </div>
+        </div>
+        <div class="card-arrow">→</div>
+      </a>
+      <a href="https://github.com/hideo-t/zaiun" target="_blank" rel="noopener" class="repo-link" title="ソースコード">📂</a>
+    </div>
+    <div class="card-wrap">
+      <a href="https://hideo-t.github.io/gamepacman/" target="_blank" rel="noopener" class="card has-pages"
+         data-name="gamepacman" data-desc="" data-stars="0" data-pages="1">
+        <div class="card-icon">🌐</div>
+        <div class="card-body">
+          <div class="card-header">
+            <h3 class="card-title">gamepacman</h3>
+            <span class="live-dot" title="公開中">● LIVE</span>
+          </div>
+          
+          <div class="card-footer">
+            <div class="badges"><span class="badge lang">HTML</span></div>
+            <span class="updated">2026/01/29</span>
+          </div>
+        </div>
+        <div class="card-arrow">→</div>
+      </a>
+      <a href="https://github.com/hideo-t/gamepacman" target="_blank" rel="noopener" class="repo-link" title="ソースコード">📂</a>
+    </div>
+    <div class="card-wrap">
+      <a href="https://hideo-t.github.io/game1/" target="_blank" rel="noopener" class="card has-pages"
+         data-name="game1" data-desc="" data-stars="0" data-pages="1">
+        <div class="card-icon">🌐</div>
+        <div class="card-body">
+          <div class="card-header">
+            <h3 class="card-title">game1</h3>
+            <span class="live-dot" title="公開中">● LIVE</span>
+          </div>
+          
+          <div class="card-footer">
+            <div class="badges"><span class="badge lang">HTML</span></div>
+            <span class="updated">2026/01/29</span>
+          </div>
+        </div>
+        <div class="card-arrow">→</div>
+      </a>
+      <a href="https://github.com/hideo-t/game1" target="_blank" rel="noopener" class="repo-link" title="ソースコード">📂</a>
+    </div>
+    <div class="card-wrap">
+      <a href="https://hideo-t.github.io/game4/" target="_blank" rel="noopener" class="card has-pages"
+         data-name="game4" data-desc="" data-stars="0" data-pages="1">
+        <div class="card-icon">🌐</div>
+        <div class="card-body">
+          <div class="card-header">
+            <h3 class="card-title">game4</h3>
+            <span class="live-dot" title="公開中">● LIVE</span>
+          </div>
+          
+          <div class="card-footer">
+            <div class="badges"><span class="badge lang">HTML</span></div>
+            <span class="updated">2026/01/29</span>
+          </div>
+        </div>
+        <div class="card-arrow">→</div>
+      </a>
+      <a href="https://github.com/hideo-t/game4" target="_blank" rel="noopener" class="repo-link" title="ソースコード">📂</a>
+    </div>
+    <div class="card-wrap">
+      <a href="https://hideo-t.github.io/game3/" target="_blank" rel="noopener" class="card has-pages"
+         data-name="game3" data-desc="" data-stars="0" data-pages="1">
+        <div class="card-icon">🌐</div>
+        <div class="card-body">
+          <div class="card-header">
+            <h3 class="card-title">game3</h3>
+            <span class="live-dot" title="公開中">● LIVE</span>
+          </div>
+          
+          <div class="card-footer">
+            <div class="badges"><span class="badge lang">HTML</span></div>
+            <span class="updated">2026/01/29</span>
+          </div>
+        </div>
+        <div class="card-arrow">→</div>
+      </a>
+      <a href="https://github.com/hideo-t/game3" target="_blank" rel="noopener" class="repo-link" title="ソースコード">📂</a>
+    </div>
+    <div class="card-wrap">
+      <a href="https://hideo-t.github.io/game2/" target="_blank" rel="noopener" class="card has-pages"
+         data-name="game2" data-desc="" data-stars="0" data-pages="1">
+        <div class="card-icon">🌐</div>
+        <div class="card-body">
+          <div class="card-header">
+            <h3 class="card-title">game2</h3>
+            <span class="live-dot" title="公開中">● LIVE</span>
+          </div>
+          
+          <div class="card-footer">
+            <div class="badges"><span class="badge lang">HTML</span></div>
+            <span class="updated">2026/01/29</span>
+          </div>
+        </div>
+        <div class="card-arrow">→</div>
+      </a>
+      <a href="https://github.com/hideo-t/game2" target="_blank" rel="noopener" class="repo-link" title="ソースコード">📂</a>
+    </div>
+    <div class="card-wrap">
+      <a href="https://hideo-t.github.io/kingdom-gallery/" target="_blank" rel="noopener" class="card has-pages"
+         data-name="kingdom-gallery" data-desc="" data-stars="0" data-pages="1">
+        <div class="card-icon">🌐</div>
+        <div class="card-body">
+          <div class="card-header">
+            <h3 class="card-title">kingdom-gallery</h3>
+            <span class="live-dot" title="公開中">● LIVE</span>
+          </div>
+          
+          <div class="card-footer">
+            <div class="badges"><span class="badge lang">HTML</span></div>
+            <span class="updated">2025/07/28</span>
+          </div>
+        </div>
+        <div class="card-arrow">→</div>
+      </a>
+      <a href="https://github.com/hideo-t/kingdom-gallery" target="_blank" rel="noopener" class="repo-link" title="ソースコード">📂</a>
+    </div>
+    <div class="card-wrap">
+      <a href="https://github.com/hideo-t/cobolmusic" target="_blank" rel="noopener" class="card"
+         data-name="cobolmusic" data-desc="cobol music generation program" data-stars="0" data-pages="0">
+        <div class="card-icon">📦</div>
+        <div class="card-body">
+          <div class="card-header">
+            <h3 class="card-title">cobolmusic</h3>
+          </div>
+          <p class="card-desc">COBOL music generation program</p>
+          <div class="card-footer">
+            <div class="badges"></div>
+            <span class="updated">2025/02/19</span>
+          </div>
+        </div>
+        <div class="card-arrow">→</div>
+      </a>
+    </div>
+</div>
+<div class="footer">
+  <a href="https://github.com/hideo-t" target="_blank">github.com/hideo-t</a>
+  &nbsp;&middot;&nbsp; 2026/02/17 11:55
+</div>
+<script>
+var cf="all";
+function setF(f,btn){cf=f;document.querySelectorAll(".filter-btn").forEach(function(b){b.classList.remove("active")});btn.classList.add("active");doFilter()}
+function doFilter(){
+  var q=document.getElementById("search").value.toLowerCase();
+  var wraps=document.querySelectorAll(".card-wrap");
+  var n=0;
+  wraps.forEach(function(w){
+    var c=w.querySelector(".card");
+    var nm=c.getAttribute("data-name")||"";
+    var ds=c.getAttribute("data-desc")||"";
+    var pg=c.getAttribute("data-pages")==="1";
+    var st=parseInt(c.getAttribute("data-stars")||"0")>0;
+    var mq=!q||nm.indexOf(q)>-1||ds.indexOf(q)>-1;
+    var mf=cf==="all"||(cf==="pages"&&pg)||(cf==="starred"&&st);
+    var show=mq&&mf;
+    w.style.display=show?"flex":"none";
+    if(show)n++;
+  });
+  var em=document.getElementById("empty-msg");
+  if(n===0){if(!em){var d=document.createElement("div");d.id="empty-msg";d.className="empty";d.textContent="該当なし";document.getElementById("list").appendChild(d)}}
+  else if(em){em.remove()}
+}
+</script>
+</body>
+</html>
